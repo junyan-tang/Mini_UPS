@@ -1,0 +1,3 @@
+[submodule "world_simulator_exec"]
+	path = world_simulator_exec
+	url = https://github.com/Sherr1Fu/world_simulator_exec.git
