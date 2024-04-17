@@ -1,0 +1,12 @@
+# Compiled class files
+*.class
+
+# Log file
+*.log
+
+# Gradle files
+.gradle/
+build/
+
+# VS Code files
+.vscode/
