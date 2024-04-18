@@ -1,18 +1,17 @@
 package edu.duke.ece568.mini_ups.service.network;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class SocketService {
-    public PrintWriter out;
-    public BufferedReader in;
+    public OutputStream out;
+    public InputStream in;
     public void startClient(String host, int port) {
         try (Socket socket = new Socket(host, port)) {
             System.out.println("Connected to server at " + host + ":" + port);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = socket.getOutputStream();
+            in = socket.getInputStream();
         }
         catch(Exception e) {
             e.printStackTrace();
