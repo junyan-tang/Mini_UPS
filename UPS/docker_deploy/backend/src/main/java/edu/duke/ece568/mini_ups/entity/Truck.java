@@ -10,6 +10,7 @@ public class Truck {
     private Integer currentX;
     private Integer currentY;
     private String status;
+    private Integer warehouseId;
     public Integer getTruckId() {
         return truckId;
     }
@@ -30,6 +31,12 @@ public class Truck {
     }
     public String getStatus() {
         return status;
+    }
+    public Integer getWarehouseId() {
+        return warehouseId;
+    }
+    public void setWarehouseId(Integer warehouseId) {
+        this.warehouseId = warehouseId;
     }
     public void setStatus(String status) {
         this.status = status;

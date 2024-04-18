@@ -1,4 +1,7 @@
 syntax = "proto2";
+
+package edu.duke.ece568.mini_ups.protocol.upsToWorld;
+
 message UInitTruck{
   required int32 id = 1;
   required int32 x=2;

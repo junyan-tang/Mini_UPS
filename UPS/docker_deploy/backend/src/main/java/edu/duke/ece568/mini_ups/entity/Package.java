@@ -15,12 +15,17 @@ public class Package {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long packageId;
+
     private String status;
     private Integer currentX;
     private Integer currentY;
     private Integer destinationX;
     private Integer destinationY;
     private Date expectedArrivalTime;
+
+    @ManyToOne
+    @JoinColumn(name = "truckid", nullable = true)
+    private Truck truck;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
