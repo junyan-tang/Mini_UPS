@@ -2,6 +2,8 @@ package edu.duke.ece568.mini_ups.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Truck {
@@ -11,6 +13,10 @@ public class Truck {
     private Integer currentY;
     private String status;
     private Integer warehouseId;
+
+    @OneToMany(mappedBy = "truck")
+    private List<Package> packages;
+
     public Integer getTruckId() {
         return truckId;
     }

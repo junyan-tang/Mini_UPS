@@ -1,0 +1,77 @@
+syntax = "proto2";
+
+message ACommand {
+    repeated AOrderATruck toOrder=1;
+    repeated AStartDelivery toStart=2;
+    repeated ACheckUsername checkUsers=3;
+    repeated int64 acks=4;
+}
+
+message AOrderATruck {
+    required int64 packageID = 1;
+    required product productInfo=2;
+    required warehouse warehouseInfo=3;
+    required destination destinationInfo=4;
+    required string upsUsername = 5;
+    required int64 seqnum=6;
+}
+
+message product{
+    required int64 productID=1;
+    required string description=2;
+    required int32 count = 3;
+}
+
+message warehouse{
+    required int32 warehouseID = 1;
+    required int32 x = 2;
+    required int32 y = 3;
+}
+
+message destination {
+    required int32 x=1;
+    required int32 y=2;
+}
+
+message AStartDelivery {
+    required int64 packageID = 1;
+    required int64 seqnum=2;
+}
+
+message ACheckUsername {
+    required string upsUsername=1;
+    required int64 seqnum=2;
+}
+
+message UCommand {
+    repeated UTruckArrival arrived=1;
+    repeated Udelivered delivered=2;
+    repeated UcheckUsernameResponse checkUser=3;
+    repeated Err error=4;
+    repeated int64 acks=5;
+}
+
+message Err{
+    required string err = 1;
+    required int64 originseqnum = 2;
+    required int64 seqnum = 3;
+}
+
+
+message UTruckArrival {
+    required int64 packageID = 1;
+    required int32 truckID=2;
+    required int64 seqnum=3;
+}
+
+message Udelivered {
+    required int64 packageID = 1;
+    required int64 seqnum=2;
+} 
+
+
+message UcheckUsernameResponse {
+    required string upsUsername=1;
+    required int64 upsUserID=2;
+    required int64 seqnum=3;
+}

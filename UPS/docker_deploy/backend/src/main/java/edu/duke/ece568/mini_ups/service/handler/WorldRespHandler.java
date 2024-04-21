@@ -7,11 +7,11 @@ import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UTruck;
 import edu.duke.ece568.mini_ups.service.network.ConnectionCloser;
 
-public class WorldResHandler {
+public class WorldRespHandler {
 
     private ConnectionCloser connectionCloser;
 
-    public WorldResHandler(ConnectionCloser connectionCloser) {
+    public WorldRespHandler(ConnectionCloser connectionCloser) {
         this.connectionCloser = connectionCloser;
     }
 

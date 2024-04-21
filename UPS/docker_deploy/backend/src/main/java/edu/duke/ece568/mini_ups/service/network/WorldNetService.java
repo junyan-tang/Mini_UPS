@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.springframework.context.annotation.Bean;
+
 import edu.duke.ece568.mini_ups.entity.Truck;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UConnect;
@@ -13,14 +15,14 @@ import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.repository.PackageRepository;
 import edu.duke.ece568.mini_ups.repository.TruckRepository;
 import edu.duke.ece568.mini_ups.repository.UserRepository;
-import edu.duke.ece568.mini_ups.service.handler.WorldResHandler;
+import edu.duke.ece568.mini_ups.service.handler.WorldRespHandler;
 
 public class WorldNetService implements ConnectionCloser {
     private SocketService socketService;
     private TruckRepository TruckRepository;
     private PackageRepository PackageRepository;
     private UserRepository UserRepository;
-    private WorldResHandler worldResHandler;
+    private WorldRespHandler worldResHandler;
     public OutputStream out;
     public InputStream in;
     final int TRUCK_NUM = 1000;
@@ -34,7 +36,12 @@ public class WorldNetService implements ConnectionCloser {
         this.socketService.startClient(host, port);
         this.out = this.socketService.out;
         this.in = this.socketService.in;
-        this.worldResHandler = new WorldResHandler(this);
+        this.worldResHandler = new WorldRespHandler(this);
+    }
+
+    @Bean
+    public WorldNetService worldNetService() {
+        return new WorldNetService();
     }
 
     public void sendUConnect(Long worldId, boolean isAmazon) {
