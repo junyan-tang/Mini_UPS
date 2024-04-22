@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userid;
@@ -18,10 +18,10 @@ public class User {
     private String email;
     private String address;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<Package> packages;
 
-    public User() {}
+    public Users() {}
 
     public Long getUserid() {
         return userid;

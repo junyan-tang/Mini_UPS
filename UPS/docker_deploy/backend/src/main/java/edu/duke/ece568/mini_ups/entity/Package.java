@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 
 @Entity
@@ -29,7 +31,11 @@ public class Package {
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
-    private User user;
+    private Users users;
+
+    @OneToMany(mappedBy = "packages")
+    private List<Item> items;
+
     public Integer getCurrentX() {
         return currentX;
     }
@@ -86,11 +92,11 @@ public class Package {
         this.expectedArrivalTime = expectedArrivalTime;
     }
 
-    public User getUser() {
-        return user;
+    public Users getUser() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Users users) {
+        this.users = users;
     }
 }

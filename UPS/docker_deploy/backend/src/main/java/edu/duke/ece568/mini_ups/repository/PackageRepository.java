@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 public interface PackageRepository extends JpaRepository<Package, Long>{
-    List<Package> findByUserId(long userId);
+    // List<Package> findByUserId(long userId);
 
-    @Transactional
-    @Query("select p from Package p where p.userId = :userId and p.status = :status")
-    int updateStatus(@Param("packageId") long packageId, @Param("status") String status);
+    // @Transactional
+    // @Query("select p from Package p where p.userId = :userId and p.status = :status")
+    // int updateStatus(@Param("packageId") long packageId, @Param("status") String status);
 
 }

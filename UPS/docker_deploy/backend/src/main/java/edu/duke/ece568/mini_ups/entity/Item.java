@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Item {
@@ -13,6 +15,11 @@ public class Item {
     private String name;
     private String description;
     private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "packageid", nullable = true)
+    private Package packages;
+
     public Long getItemId() {
         return itemId;
     }
@@ -37,6 +44,10 @@ public class Item {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
-
-    
+    public Package getPackages() {
+        return packages;
+    }
+    public void setPackages(Package packages) {
+        this.packages = packages;
+    }
 }
