@@ -1738,17 +1738,28 @@ public final class AmazonUps {
     long getPackageID();
 
     /**
-     * <code>required .product productInfo = 2;</code>
+     * <code>repeated .product productInfo = 2;</code>
      */
-    boolean hasProductInfo();
+    java.util.List<AmazonUps.product> 
+        getProductInfoList();
     /**
-     * <code>required .product productInfo = 2;</code>
+     * <code>repeated .product productInfo = 2;</code>
      */
-    AmazonUps.product getProductInfo();
+    AmazonUps.product getProductInfo(int index);
     /**
-     * <code>required .product productInfo = 2;</code>
+     * <code>repeated .product productInfo = 2;</code>
      */
-    AmazonUps.productOrBuilder getProductInfoOrBuilder();
+    int getProductInfoCount();
+    /**
+     * <code>repeated .product productInfo = 2;</code>
+     */
+    java.util.List<? extends AmazonUps.productOrBuilder> 
+        getProductInfoOrBuilderList();
+    /**
+     * <code>repeated .product productInfo = 2;</code>
+     */
+    AmazonUps.productOrBuilder getProductInfoOrBuilder(
+        int index);
 
     /**
      * <code>required .warehouse warehouseInfo = 3;</code>
@@ -1813,6 +1824,7 @@ public final class AmazonUps {
     }
     private AOrderATruck() {
       packageID_ = 0L;
+      productInfo_ = java.util.Collections.emptyList();
       upsUsername_ = "";
       seqnum_ = 0L;
     }
@@ -1847,21 +1859,17 @@ public final class AmazonUps {
               break;
             }
             case 18: {
-              AmazonUps.product.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) == 0x00000002)) {
-                subBuilder = productInfo_.toBuilder();
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                productInfo_ = new java.util.ArrayList<AmazonUps.product>();
+                mutable_bitField0_ |= 0x00000002;
               }
-              productInfo_ = input.readMessage(AmazonUps.product.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(productInfo_);
-                productInfo_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
+              productInfo_.add(
+                  input.readMessage(AmazonUps.product.PARSER, extensionRegistry));
               break;
             }
             case 26: {
               AmazonUps.warehouse.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
                 subBuilder = warehouseInfo_.toBuilder();
               }
               warehouseInfo_ = input.readMessage(AmazonUps.warehouse.PARSER, extensionRegistry);
@@ -1869,12 +1877,12 @@ public final class AmazonUps {
                 subBuilder.mergeFrom(warehouseInfo_);
                 warehouseInfo_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000002;
               break;
             }
             case 34: {
               AmazonUps.destination.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
                 subBuilder = destinationInfo_.toBuilder();
               }
               destinationInfo_ = input.readMessage(AmazonUps.destination.PARSER, extensionRegistry);
@@ -1882,17 +1890,17 @@ public final class AmazonUps {
                 subBuilder.mergeFrom(destinationInfo_);
                 destinationInfo_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000004;
               break;
             }
             case 42: {
               com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000008;
               upsUsername_ = bs;
               break;
             }
             case 48: {
-              bitField0_ |= 0x00000020;
+              bitField0_ |= 0x00000010;
               seqnum_ = input.readInt64();
               break;
             }
@@ -1911,6 +1919,9 @@ public final class AmazonUps {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          productInfo_ = java.util.Collections.unmodifiableList(productInfo_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -1945,24 +1956,38 @@ public final class AmazonUps {
     }
 
     public static final int PRODUCTINFO_FIELD_NUMBER = 2;
-    private AmazonUps.product productInfo_;
+    private java.util.List<AmazonUps.product> productInfo_;
     /**
-     * <code>required .product productInfo = 2;</code>
+     * <code>repeated .product productInfo = 2;</code>
      */
-    public boolean hasProductInfo() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+    public java.util.List<AmazonUps.product> getProductInfoList() {
+      return productInfo_;
     }
     /**
-     * <code>required .product productInfo = 2;</code>
+     * <code>repeated .product productInfo = 2;</code>
      */
-    public AmazonUps.product getProductInfo() {
-      return productInfo_ == null ? AmazonUps.product.getDefaultInstance() : productInfo_;
+    public java.util.List<? extends AmazonUps.productOrBuilder> 
+        getProductInfoOrBuilderList() {
+      return productInfo_;
     }
     /**
-     * <code>required .product productInfo = 2;</code>
+     * <code>repeated .product productInfo = 2;</code>
      */
-    public AmazonUps.productOrBuilder getProductInfoOrBuilder() {
-      return productInfo_ == null ? AmazonUps.product.getDefaultInstance() : productInfo_;
+    public int getProductInfoCount() {
+      return productInfo_.size();
+    }
+    /**
+     * <code>repeated .product productInfo = 2;</code>
+     */
+    public AmazonUps.product getProductInfo(int index) {
+      return productInfo_.get(index);
+    }
+    /**
+     * <code>repeated .product productInfo = 2;</code>
+     */
+    public AmazonUps.productOrBuilder getProductInfoOrBuilder(
+        int index) {
+      return productInfo_.get(index);
     }
 
     public static final int WAREHOUSEINFO_FIELD_NUMBER = 3;
@@ -1971,7 +1996,7 @@ public final class AmazonUps {
      * <code>required .warehouse warehouseInfo = 3;</code>
      */
     public boolean hasWarehouseInfo() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .warehouse warehouseInfo = 3;</code>
@@ -1992,7 +2017,7 @@ public final class AmazonUps {
      * <code>required .destination destinationInfo = 4;</code>
      */
     public boolean hasDestinationInfo() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required .destination destinationInfo = 4;</code>
@@ -2013,7 +2038,7 @@ public final class AmazonUps {
      * <code>required string upsUsername = 5;</code>
      */
     public boolean hasUpsUsername() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>required string upsUsername = 5;</code>
@@ -2055,7 +2080,7 @@ public final class AmazonUps {
      * <code>required int64 seqnum = 6;</code>
      */
     public boolean hasSeqnum() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>required int64 seqnum = 6;</code>
@@ -2075,10 +2100,6 @@ public final class AmazonUps {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasProductInfo()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasWarehouseInfo()) {
         memoizedIsInitialized = 0;
         return false;
@@ -2095,9 +2116,11 @@ public final class AmazonUps {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getProductInfo().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
+      for (int i = 0; i < getProductInfoCount(); i++) {
+        if (!getProductInfo(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (!getWarehouseInfo().isInitialized()) {
         memoizedIsInitialized = 0;
@@ -2117,19 +2140,19 @@ public final class AmazonUps {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeInt64(1, packageID_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, getProductInfo());
+      for (int i = 0; i < productInfo_.size(); i++) {
+        output.writeMessage(2, productInfo_.get(i));
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(3, getWarehouseInfo());
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(4, getDestinationInfo());
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, upsUsername_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeInt64(6, seqnum_);
       }
       unknownFields.writeTo(output);
@@ -2145,22 +2168,22 @@ public final class AmazonUps {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(1, packageID_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      for (int i = 0; i < productInfo_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getProductInfo());
+          .computeMessageSize(2, productInfo_.get(i));
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getWarehouseInfo());
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, getDestinationInfo());
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, upsUsername_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(6, seqnum_);
       }
@@ -2185,11 +2208,8 @@ public final class AmazonUps {
         result = result && (getPackageID()
             == other.getPackageID());
       }
-      result = result && (hasProductInfo() == other.hasProductInfo());
-      if (hasProductInfo()) {
-        result = result && getProductInfo()
-            .equals(other.getProductInfo());
-      }
+      result = result && getProductInfoList()
+          .equals(other.getProductInfoList());
       result = result && (hasWarehouseInfo() == other.hasWarehouseInfo());
       if (hasWarehouseInfo()) {
         result = result && getWarehouseInfo()
@@ -2226,9 +2246,9 @@ public final class AmazonUps {
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getPackageID());
       }
-      if (hasProductInfo()) {
+      if (getProductInfoCount() > 0) {
         hash = (37 * hash) + PRODUCTINFO_FIELD_NUMBER;
-        hash = (53 * hash) + getProductInfo().hashCode();
+        hash = (53 * hash) + getProductInfoList().hashCode();
       }
       if (hasWarehouseInfo()) {
         hash = (37 * hash) + WAREHOUSEINFO_FIELD_NUMBER;
@@ -2386,11 +2406,11 @@ public final class AmazonUps {
         packageID_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000001);
         if (productInfoBuilder_ == null) {
-          productInfo_ = null;
+          productInfo_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           productInfoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
         if (warehouseInfoBuilder_ == null) {
           warehouseInfo_ = null;
         } else {
@@ -2439,16 +2459,17 @@ public final class AmazonUps {
           to_bitField0_ |= 0x00000001;
         }
         result.packageID_ = packageID_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
         if (productInfoBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            productInfo_ = java.util.Collections.unmodifiableList(productInfo_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
           result.productInfo_ = productInfo_;
         } else {
           result.productInfo_ = productInfoBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
+          to_bitField0_ |= 0x00000002;
         }
         if (warehouseInfoBuilder_ == null) {
           result.warehouseInfo_ = warehouseInfo_;
@@ -2456,7 +2477,7 @@ public final class AmazonUps {
           result.warehouseInfo_ = warehouseInfoBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
+          to_bitField0_ |= 0x00000004;
         }
         if (destinationInfoBuilder_ == null) {
           result.destinationInfo_ = destinationInfo_;
@@ -2464,11 +2485,11 @@ public final class AmazonUps {
           result.destinationInfo_ = destinationInfoBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
+          to_bitField0_ |= 0x00000008;
         }
         result.upsUsername_ = upsUsername_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
+          to_bitField0_ |= 0x00000010;
         }
         result.seqnum_ = seqnum_;
         result.bitField0_ = to_bitField0_;
@@ -2523,8 +2544,31 @@ public final class AmazonUps {
         if (other.hasPackageID()) {
           setPackageID(other.getPackageID());
         }
-        if (other.hasProductInfo()) {
-          mergeProductInfo(other.getProductInfo());
+        if (productInfoBuilder_ == null) {
+          if (!other.productInfo_.isEmpty()) {
+            if (productInfo_.isEmpty()) {
+              productInfo_ = other.productInfo_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureProductInfoIsMutable();
+              productInfo_.addAll(other.productInfo_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.productInfo_.isEmpty()) {
+            if (productInfoBuilder_.isEmpty()) {
+              productInfoBuilder_.dispose();
+              productInfoBuilder_ = null;
+              productInfo_ = other.productInfo_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              productInfoBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getProductInfoFieldBuilder() : null;
+            } else {
+              productInfoBuilder_.addAllMessages(other.productInfo_);
+            }
+          }
         }
         if (other.hasWarehouseInfo()) {
           mergeWarehouseInfo(other.getWarehouseInfo());
@@ -2550,9 +2594,6 @@ public final class AmazonUps {
         if (!hasPackageID()) {
           return false;
         }
-        if (!hasProductInfo()) {
-          return false;
-        }
         if (!hasWarehouseInfo()) {
           return false;
         }
@@ -2565,8 +2606,10 @@ public final class AmazonUps {
         if (!hasSeqnum()) {
           return false;
         }
-        if (!getProductInfo().isInitialized()) {
-          return false;
+        for (int i = 0; i < getProductInfoCount(); i++) {
+          if (!getProductInfo(i).isInitialized()) {
+            return false;
+          }
         }
         if (!getWarehouseInfo().isInitialized()) {
           return false;
@@ -2629,117 +2672,239 @@ public final class AmazonUps {
         return this;
       }
 
-      private AmazonUps.product productInfo_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          AmazonUps.product, AmazonUps.product.Builder, AmazonUps.productOrBuilder> productInfoBuilder_;
-      /**
-       * <code>required .product productInfo = 2;</code>
-       */
-      public boolean hasProductInfo() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+      private java.util.List<AmazonUps.product> productInfo_ =
+        java.util.Collections.emptyList();
+      private void ensureProductInfoIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          productInfo_ = new java.util.ArrayList<AmazonUps.product>(productInfo_);
+          bitField0_ |= 0x00000002;
+         }
       }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          AmazonUps.product, AmazonUps.product.Builder, AmazonUps.productOrBuilder> productInfoBuilder_;
+
       /**
-       * <code>required .product productInfo = 2;</code>
+       * <code>repeated .product productInfo = 2;</code>
        */
-      public AmazonUps.product getProductInfo() {
+      public java.util.List<AmazonUps.product> getProductInfoList() {
         if (productInfoBuilder_ == null) {
-          return productInfo_ == null ? AmazonUps.product.getDefaultInstance() : productInfo_;
+          return java.util.Collections.unmodifiableList(productInfo_);
         } else {
-          return productInfoBuilder_.getMessage();
+          return productInfoBuilder_.getMessageList();
         }
       }
       /**
-       * <code>required .product productInfo = 2;</code>
+       * <code>repeated .product productInfo = 2;</code>
        */
-      public Builder setProductInfo(AmazonUps.product value) {
+      public int getProductInfoCount() {
+        if (productInfoBuilder_ == null) {
+          return productInfo_.size();
+        } else {
+          return productInfoBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public AmazonUps.product getProductInfo(int index) {
+        if (productInfoBuilder_ == null) {
+          return productInfo_.get(index);
+        } else {
+          return productInfoBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public Builder setProductInfo(
+          int index, AmazonUps.product value) {
         if (productInfoBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          productInfo_ = value;
+          ensureProductInfoIsMutable();
+          productInfo_.set(index, value);
           onChanged();
         } else {
-          productInfoBuilder_.setMessage(value);
+          productInfoBuilder_.setMessage(index, value);
         }
-        bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>required .product productInfo = 2;</code>
+       * <code>repeated .product productInfo = 2;</code>
        */
       public Builder setProductInfo(
+          int index, AmazonUps.product.Builder builderForValue) {
+        if (productInfoBuilder_ == null) {
+          ensureProductInfoIsMutable();
+          productInfo_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          productInfoBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public Builder addProductInfo(AmazonUps.product value) {
+        if (productInfoBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProductInfoIsMutable();
+          productInfo_.add(value);
+          onChanged();
+        } else {
+          productInfoBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public Builder addProductInfo(
+          int index, AmazonUps.product value) {
+        if (productInfoBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProductInfoIsMutable();
+          productInfo_.add(index, value);
+          onChanged();
+        } else {
+          productInfoBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public Builder addProductInfo(
           AmazonUps.product.Builder builderForValue) {
         if (productInfoBuilder_ == null) {
-          productInfo_ = builderForValue.build();
+          ensureProductInfoIsMutable();
+          productInfo_.add(builderForValue.build());
           onChanged();
         } else {
-          productInfoBuilder_.setMessage(builderForValue.build());
+          productInfoBuilder_.addMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>required .product productInfo = 2;</code>
+       * <code>repeated .product productInfo = 2;</code>
        */
-      public Builder mergeProductInfo(AmazonUps.product value) {
+      public Builder addProductInfo(
+          int index, AmazonUps.product.Builder builderForValue) {
         if (productInfoBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              productInfo_ != null &&
-              productInfo_ != AmazonUps.product.getDefaultInstance()) {
-            productInfo_ =
-              AmazonUps.product.newBuilder(productInfo_).mergeFrom(value).buildPartial();
-          } else {
-            productInfo_ = value;
-          }
+          ensureProductInfoIsMutable();
+          productInfo_.add(index, builderForValue.build());
           onChanged();
         } else {
-          productInfoBuilder_.mergeFrom(value);
+          productInfoBuilder_.addMessage(index, builderForValue.build());
         }
-        bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>required .product productInfo = 2;</code>
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public Builder addAllProductInfo(
+          java.lang.Iterable<? extends AmazonUps.product> values) {
+        if (productInfoBuilder_ == null) {
+          ensureProductInfoIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, productInfo_);
+          onChanged();
+        } else {
+          productInfoBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
        */
       public Builder clearProductInfo() {
         if (productInfoBuilder_ == null) {
-          productInfo_ = null;
+          productInfo_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           productInfoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       /**
-       * <code>required .product productInfo = 2;</code>
+       * <code>repeated .product productInfo = 2;</code>
        */
-      public AmazonUps.product.Builder getProductInfoBuilder() {
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return getProductInfoFieldBuilder().getBuilder();
+      public Builder removeProductInfo(int index) {
+        if (productInfoBuilder_ == null) {
+          ensureProductInfoIsMutable();
+          productInfo_.remove(index);
+          onChanged();
+        } else {
+          productInfoBuilder_.remove(index);
+        }
+        return this;
       }
       /**
-       * <code>required .product productInfo = 2;</code>
+       * <code>repeated .product productInfo = 2;</code>
        */
-      public AmazonUps.productOrBuilder getProductInfoOrBuilder() {
-        if (productInfoBuilder_ != null) {
-          return productInfoBuilder_.getMessageOrBuilder();
-        } else {
-          return productInfo_ == null ?
-              AmazonUps.product.getDefaultInstance() : productInfo_;
+      public AmazonUps.product.Builder getProductInfoBuilder(
+          int index) {
+        return getProductInfoFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public AmazonUps.productOrBuilder getProductInfoOrBuilder(
+          int index) {
+        if (productInfoBuilder_ == null) {
+          return productInfo_.get(index);  } else {
+          return productInfoBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>required .product productInfo = 2;</code>
+       * <code>repeated .product productInfo = 2;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<
+      public java.util.List<? extends AmazonUps.productOrBuilder> 
+           getProductInfoOrBuilderList() {
+        if (productInfoBuilder_ != null) {
+          return productInfoBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(productInfo_);
+        }
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public AmazonUps.product.Builder addProductInfoBuilder() {
+        return getProductInfoFieldBuilder().addBuilder(
+            AmazonUps.product.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public AmazonUps.product.Builder addProductInfoBuilder(
+          int index) {
+        return getProductInfoFieldBuilder().addBuilder(
+            index, AmazonUps.product.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .product productInfo = 2;</code>
+       */
+      public java.util.List<AmazonUps.product.Builder> 
+           getProductInfoBuilderList() {
+        return getProductInfoFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
           AmazonUps.product, AmazonUps.product.Builder, AmazonUps.productOrBuilder> 
           getProductInfoFieldBuilder() {
         if (productInfoBuilder_ == null) {
-          productInfoBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+          productInfoBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               AmazonUps.product, AmazonUps.product.Builder, AmazonUps.productOrBuilder>(
-                  getProductInfo(),
+                  productInfo_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
                   isClean());
           productInfo_ = null;
@@ -11554,7 +11719,7 @@ public final class AmazonUps {
       "2\017.AStartDelivery\022#\n\ncheckUsers\030\003 \003(\0132\017." +
       "ACheckUsername\022\014\n\004acks\030\004 \003(\003\"\257\001\n\014AOrderA" +
       "Truck\022\021\n\tpackageID\030\001 \002(\003\022\035\n\013productInfo\030" +
-      "\002 \002(\0132\010.product\022!\n\rwarehouseInfo\030\003 \002(\0132\n" +
+      "\002 \003(\0132\010.product\022!\n\rwarehouseInfo\030\003 \002(\0132\n" +
       ".warehouse\022%\n\017destinationInfo\030\004 \002(\0132\014.de" +
       "stination\022\023\n\013upsUsername\030\005 \002(\t\022\016\n\006seqnum" +
       "\030\006 \002(\003\"@\n\007product\022\021\n\tproductID\030\001 \002(\003\022\023\n\013" +

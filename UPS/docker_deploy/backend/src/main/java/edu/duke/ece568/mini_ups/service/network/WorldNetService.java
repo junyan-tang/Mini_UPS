@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.entity.Truck;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
@@ -17,32 +18,52 @@ import edu.duke.ece568.mini_ups.repository.TruckRepository;
 import edu.duke.ece568.mini_ups.repository.UserRepository;
 import edu.duke.ece568.mini_ups.service.handler.WorldRespHandler;
 
+@Service
 public class WorldNetService implements ConnectionCloser {
     private SocketService socketService;
     private TruckRepository TruckRepository;
     private PackageRepository PackageRepository;
     private UserRepository UserRepository;
-    private WorldRespHandler worldResHandler;
+    private WorldRespHandler worldRespHandler;
     public OutputStream out;
     public InputStream in;
     final int TRUCK_NUM = 1000;
     final int TRUCK_X = 10;
     final int TRUCK_Y = 10;
 
-    public WorldNetService() {
-        String host = "localhost";
-        int port = 12345;
-        this.socketService = new SocketService();
-        this.socketService.startClient(host, port);
-        this.out = this.socketService.out;
-        this.in = this.socketService.in;
-        this.worldResHandler = new WorldRespHandler(this);
+    @Autowired
+    public WorldNetService(SocketService socketService) {
+        this.socketService = socketService;
+        initializeConnection();
     }
 
-    @Bean
-    public WorldNetService worldNetService() {
-        return new WorldNetService();
+    private void initializeConnection() {
+        try {
+            String host = "localhost"; // 替换为实际的host
+            int port = 12345; // 替换为实际的port
+            this.socketService.startClient(host, port);
+            this.out = this.socketService.out;
+            this.in = this.socketService.in;
+            this.worldRespHandler = new WorldRespHandler(this);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to start socket connection", e);
+        }
     }
+
+    // public WorldNetService() {
+    //     String host = "localhost";
+    //     int port = 12345;
+    //     this.socketService = new SocketService();
+    //     this.socketService.startClient(host, port);
+    //     this.out = this.socketService.out;
+    //     this.in = this.socketService.in;
+    //     this.worldResHandler = new WorldRespHandler(this);
+    // }
+
+    // @Bean
+    // public WorldNetService worldNetService() {
+    //     return new WorldNetService();
+    // }
 
     public void sendUConnect(Long worldId, boolean isAmazon) {
         UConnect.Builder uConnectBuilder = UConnect.newBuilder()
@@ -74,7 +95,7 @@ public class WorldNetService implements ConnectionCloser {
         try {
             UResponses response = UResponses.parseDelimitedFrom(in);
             if (response != null) {
-                worldResHandler.handle(response);
+                worldRespHandler.handle(response);
                 sendAcksIfNecessary(response);
             }
             return response;
