@@ -33,12 +33,12 @@ public class Item {
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+    // public String getName() {
+    //     return name;
+    // }
+    // public void setName(String name) {
+    //     this.name = name;
+    // }
     public String getDescription() {
         return description;
     }
