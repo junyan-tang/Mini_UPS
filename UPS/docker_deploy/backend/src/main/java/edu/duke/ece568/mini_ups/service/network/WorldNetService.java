@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 import edu.duke.ece568.mini_ups.entity.Truck;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UConnect;
+import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UConnected;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UInitTruck;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.repository.PackageRepository;
 import edu.duke.ece568.mini_ups.repository.TruckRepository;
 import edu.duke.ece568.mini_ups.repository.UserRepository;
 import edu.duke.ece568.mini_ups.service.handler.WorldRespHandler;
+import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
+import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
 @Service
 public class WorldNetService implements ConnectionCloser {
@@ -37,6 +40,12 @@ public class WorldNetService implements ConnectionCloser {
         initializeConnection();
     }
 
+    public void setworldRespHandlerACmdSender(AmazonCmdSender amazonCmdSender) {
+        this.worldRespHandler.setAmazonCmdSender(amazonCmdSender);
+    }
+    public void setworldRespHandlerWCmdSender(WorldCmdSender worldCmdSender) {
+        this.worldRespHandler.setWorldCmdSender(worldCmdSender);
+    }
     private void initializeConnection() {
         try {
             String host = "localhost"; // 替换为实际的host
@@ -91,12 +100,27 @@ public class WorldNetService implements ConnectionCloser {
         }
     }
 
+    public Boolean receiveUconnected(){
+        try {
+            UConnected response = UConnected.parseDelimitedFrom(in);
+            if ("connected!".equals(response.getResult())) {
+                System.out.println("Successfully connected: " + response.getResult());
+            } else if (response.getResult().startsWith("error:")) {
+                System.out.println("Error from server: " + response.getResult());
+                return false;
+            }
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     public UResponses receiveMessage() throws IOException {
         try {
             UResponses response = UResponses.parseDelimitedFrom(in);
             if (response != null) {
-                worldRespHandler.handle(response);
-                sendAcksIfNecessary(response);
+                //sendAcksIfNecessary(response);
+                worldRespHandler.handle(response);               
             }
             return response;
         } catch (IOException e) {

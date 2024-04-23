@@ -36,6 +36,10 @@ public class Package {
     @OneToMany(mappedBy = "packages")
     private List<Item> items;
 
+    public void setTruck(Truck truck) {
+        this.truck = truck;
+    }
+
     public Integer getCurrentX() {
         return currentX;
     }

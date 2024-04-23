@@ -6,12 +6,13 @@ import java.io.OutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
 import edu.duke.ece568.mini_ups.repository.UserRepository;
 import edu.duke.ece568.mini_ups.service.handler.AmazonRespHandler;
+import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
+import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
 //@Service
 public class AmazonNetService implements ConnectionCloser {
@@ -27,6 +28,13 @@ public class AmazonNetService implements ConnectionCloser {
         this.userRepository = userRepository;
         this.amazonResHandler = amazonResHandler;
         initializeConnection();
+    }
+
+    public void setamazonResHandlerACmdSender(AmazonCmdSender amazonCmdSender) {
+        this.amazonResHandler.setAmazonCmdSender(amazonCmdSender);
+    }
+    public void setamazonResHandlerWCmdSender(WorldCmdSender worldCmdSender) {
+        this.amazonResHandler.setWorldCmdSender(worldCmdSender);
     }
 
     private void initializeConnection() {
@@ -56,8 +64,8 @@ public class AmazonNetService implements ConnectionCloser {
         try {
             ACommand command = ACommand.parseDelimitedFrom(in);
             if (command != null) {
-                amazonResHandler.handle(command);
-                sendAcksIfNecessary(command);
+                //sendAcksIfNecessary(command);
+                amazonResHandler.handle(command);                
             }
             return command;
         } catch (IOException e) {

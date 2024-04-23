@@ -12,7 +12,8 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
-    private String name;
+    private Long productId;
+    // private String name;
     private String description;
     private Integer quantity;
 
@@ -22,6 +23,12 @@ public class Item {
 
     public Long getItemId() {
         return itemId;
+    }
+    public Long getProductId() {
+        return productId;
+    }
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
     public void setItemId(Long itemId) {
         this.itemId = itemId;
