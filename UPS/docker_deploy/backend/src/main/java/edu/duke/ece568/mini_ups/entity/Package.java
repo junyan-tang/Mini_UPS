@@ -26,15 +26,19 @@ public class Package {
     private Date expectedArrivalTime;
 
     @ManyToOne
-    @JoinColumn(name = "truckid", nullable = true)
+    @JoinColumn(name = "truckId", nullable = true)
     private Truck truck;
 
     @ManyToOne
-    @JoinColumn(name = "userid", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private Users users;
 
     @OneToMany(mappedBy = "packages")
     private List<Item> items;
+
+    public void setTruck(Truck truck) {
+        this.truck = truck;
+    }
 
     public Integer getCurrentX() {
         return currentX;
@@ -94,6 +98,26 @@ public class Package {
 
     public Users getUser() {
         return users;
+    }
+
+    public Truck getTruck() {
+        return truck;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public void setUser(Users users) {

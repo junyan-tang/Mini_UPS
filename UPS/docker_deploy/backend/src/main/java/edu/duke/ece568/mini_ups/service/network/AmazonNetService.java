@@ -5,13 +5,14 @@
 // import java.io.OutputStream;
 // import java.util.List;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
-// import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
-// import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
-// import edu.duke.ece568.mini_ups.repository.UserRepository;
-// import edu.duke.ece568.mini_ups.service.handler.AmazonRespHandler;
+import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
+import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
+import edu.duke.ece568.mini_ups.repository.UserRepository;
+import edu.duke.ece568.mini_ups.service.handler.AmazonRespHandler;
+import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
+import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
 // //@Service
 // public class AmazonNetService implements ConnectionCloser {
@@ -21,13 +22,20 @@
 //     public OutputStream out;
 //     public InputStream in;
 
-//     @Autowired
-//     public AmazonNetService(SocketService socketService, UserRepository userRepository, AmazonRespHandler amazonResHandler) {
-//         this.socketService = socketService;
-//         this.userRepository = userRepository;
-//         this.amazonResHandler = amazonResHandler;
-//         initializeConnection();
-//     }
+    @Autowired
+    public AmazonNetService(SocketService socketService, UserRepository userRepository, AmazonRespHandler amazonResHandler) {
+        this.socketService = socketService;
+        this.userRepository = userRepository;
+        this.amazonResHandler = amazonResHandler;
+        initializeConnection();
+    }
+
+    public void setamazonResHandlerACmdSender(AmazonCmdSender amazonCmdSender) {
+        this.amazonResHandler.setAmazonCmdSender(amazonCmdSender);
+    }
+    public void setamazonResHandlerWCmdSender(WorldCmdSender worldCmdSender) {
+        this.amazonResHandler.setWorldCmdSender(worldCmdSender);
+    }
 
 //     private void initializeConnection() {
 //         String host = "amazon-server-host";
@@ -52,18 +60,18 @@
 //     //     return new AmazonNetService();
 //     // }
 
-//     public ACommand receiveCommand() throws IOException {
-//         try {
-//             ACommand command = ACommand.parseDelimitedFrom(in);
-//             if (command != null) {
-//                 amazonResHandler.handle(command);
-//                 sendAcksIfNecessary(command);
-//             }
-//             return command;
-//         } catch (IOException e) {
-//             throw new IOException("Failed to receive message from Amazon");
-//         }
-//     }
+    public ACommand receiveCommand() throws IOException {
+        try {
+            ACommand command = ACommand.parseDelimitedFrom(in);
+            if (command != null) {
+                //sendAcksIfNecessary(command);
+                amazonResHandler.handle(command);                
+            }
+            return command;
+        } catch (IOException e) {
+            throw new IOException("Failed to receive message from Amazon");
+        }
+    }
 
 //     private void sendAcksIfNecessary(ACommand command) throws IOException {
 //         List<Long> acks = command.getAcksList();

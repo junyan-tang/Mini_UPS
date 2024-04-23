@@ -12,26 +12,33 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
-    private String name;
+    private Long productId;
+    // private String name;
     private String description;
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "packageid", nullable = true)
+    @JoinColumn(name = "packageId", nullable = true)
     private Package packages;
 
     public Long getItemId() {
         return itemId;
     }
+    public Long getProductId() {
+        return productId;
+    }
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+    // public String getName() {
+    //     return name;
+    // }
+    // public void setName(String name) {
+    //     this.name = name;
+    // }
     public String getDescription() {
         return description;
     }
