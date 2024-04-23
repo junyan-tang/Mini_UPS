@@ -18,7 +18,7 @@ public class WorldCmdSender {
     private OutputStream outputStream;
     private Long seqnum = 0L;
 
-    public WorldCmdSender(OutputStream output) {
+    public void setWorldCmdSender(OutputStream output) {
         outputStream = output;
     }
 

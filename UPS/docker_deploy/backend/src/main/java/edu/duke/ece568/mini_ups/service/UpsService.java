@@ -24,8 +24,10 @@ public class UpsService {
     // }
 
     public void start() {
-        AmazonCmdSender amazonCmdSender = new AmazonCmdSender(amazonNetService.out);
-        WorldCmdSender worldCmdSender = new WorldCmdSender(worldNetService.out);
+        AmazonCmdSender amazonCmdSender = new AmazonCmdSender();
+        amazonCmdSender.setAmazonCmdSender(amazonNetService.out);
+        WorldCmdSender worldCmdSender = new WorldCmdSender();
+        worldCmdSender.setWorldCmdSender(worldNetService.out);
         amazonNetService.setamazonResHandlerACmdSender(amazonCmdSender);
         amazonNetService.setamazonResHandlerWCmdSender(worldCmdSender);
         worldNetService.setworldRespHandlerACmdSender(amazonCmdSender);
