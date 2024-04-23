@@ -1,6 +1,8 @@
 package edu.duke.ece568.mini_ups.controller;
 
+import edu.duke.ece568.mini_ups.dto.UserDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,8 +24,8 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/home")
-    public String home() {
-        return "home";
+    @PostMapping("/register")
+    public String handleRegistration(@ModelAttribute UserDto userDto) {
+        return "login";
     }
 }

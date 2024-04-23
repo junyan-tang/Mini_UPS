@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Package Details</title>
+</head>
+<body>
+    <h1>Package Details</h1>
+    <div>
+        <p><strong>Package ID:</strong> <span th:text="${package.id}">123</span></p>
+        <p><strong>Description:</strong> <span th:text="${package.description}">Description here</span></p>
+        <p><strong>Status:</strong> <span th:text="${package.status}">In transit</span></p>
+        <!-- More details can be added here -->
+    </div>
+</body>
+</html>

@@ -16,7 +16,6 @@ public class Users {
     private String username;
     private String password;
     private String email;
-    private String address;
 
     @OneToMany(mappedBy = "users")
     private List<Package> packages;
@@ -47,13 +46,7 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getAddress() {
-        return address;
-    }
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
+    
     public List<Package> getPackages() {
         return packages;
     }

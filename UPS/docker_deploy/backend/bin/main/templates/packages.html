@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Package List</title>
+</head>
+<body>
+    <h1>Your Packages</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Package ID</th>
+                <th>Description</th>
+                <th>View Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="package : ${packages}">
+                <td th:text="${package.id}">123</td>
+                <td th:text="${package.description}">Package Description</td>
+                <td><a th:href="@{/package/details/{id}(id=${package.id})}">View Details</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
