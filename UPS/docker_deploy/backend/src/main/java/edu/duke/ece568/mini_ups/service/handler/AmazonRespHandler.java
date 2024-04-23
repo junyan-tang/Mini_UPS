@@ -57,7 +57,7 @@ public class AmazonRespHandler {
     private void handleOrderTruck(ACommand command) {
         for (AOrderATruck order : command.getToOrderList()) {
             try {
-                worldCmdSender.sendAck(order.getSeqnum());
+                amazonCmdSender.sendAck(order.getSeqnum());
                 System.out.println("Order truck for package " + order.getPackageID());
                 Users user = userService.findByUsername(order.getUpsUsername());
 
@@ -103,19 +103,21 @@ public class AmazonRespHandler {
 
     private void handleStartDelivery(ACommand command) {
         for (AStartDelivery delivery : command.getToStartList()) {
-            System.out.println("Start delivery for package " + delivery.getPackageID());
-            Package p = packageService.findById(delivery.getPackageID());
-            if (p == null) {
-                try {
-                    amazonCmdSender.sendError("Package does not exist", delivery.getSeqnum());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                continue;
-            }
-            p.setStatus("delivering");
-            packageService.save(p);
             try {
+                amazonCmdSender.sendAck(delivery.getSeqnum());
+                System.out.println("Start delivery for package " + delivery.getPackageID());
+                Package p = packageService.findById(delivery.getPackageID());
+                if (p == null) {
+                    try {
+                        amazonCmdSender.sendError("Package does not exist", delivery.getSeqnum());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
+                p.setStatus("delivering");
+                packageService.save(p);
+
                 worldCmdSender.sendDelivery(p.getTruck().getTruckId(), p);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -125,20 +127,18 @@ public class AmazonRespHandler {
 
     private void handleCheckUsername(ACommand command) {
         for (ACheckUsername checkUser : command.getCheckUsersList()) {
-            System.out.println("Check username for " + checkUser.getUpsUsername());
-            Users user = userService.findByUsername(checkUser.getUpsUsername());
-            if (user == null) {
-                try {
+            try {
+                amazonCmdSender.sendAck(checkUser.getSeqnum());
+                System.out.println("Check username for " + checkUser.getUpsUsername());
+                Users user = userService.findByUsername(checkUser.getUpsUsername());
+                if (user == null) {
                     amazonCmdSender.sendError("User does not exist", checkUser.getSeqnum());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
+
+                } else {
                     amazonCmdSender.sendUsernameCheckResponse(user.getUsername(), user.getUserid());
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

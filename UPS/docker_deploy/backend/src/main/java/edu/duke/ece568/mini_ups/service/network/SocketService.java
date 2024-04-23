@@ -7,10 +7,12 @@ import java.net.Socket;
 import org.springframework.stereotype.Service;
 @Service
 public class SocketService {
+    public Socket socket;
     public OutputStream out;
     public InputStream in;
     public void startClient(String host, int port) {
-        try (Socket socket = new Socket(host, port)) {
+        try {
+            socket = new Socket(host, port);
             System.out.println("Connected to server at " + host + ":" + port);
             out = socket.getOutputStream();
             in = socket.getInputStream();

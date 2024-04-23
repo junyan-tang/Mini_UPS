@@ -20,7 +20,7 @@ public class UpsService {
     }
     // @Autowired
     // public UpsService(WorldNetService worldNetService) {
-    //     this.worldNetService = worldNetService;
+    // this.worldNetService = worldNetService;
     // }
 
     public void start() {
@@ -34,18 +34,19 @@ public class UpsService {
         worldNetService.setworldRespHandlerWCmdSender(worldCmdSender);
 
         System.out.println("UPS Service Started");
-        worldNetService.sendUConnect(1L, false);
+        worldNetService.sendUConnect(7L, false);
         if (worldNetService.receiveUconnected()) {
             System.out.println("Connected to World");
-        }
-        else{
+        } else {
             return;
         }
-        try {
-            amazonNetService.receiveCommand();
-            worldNetService.receiveMessage();
-        } catch (Exception e) {
-            e.printStackTrace();
+        while (true) {
+            try {
+                amazonNetService.receiveCommand();
+                worldNetService.receiveMessage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

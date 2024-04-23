@@ -19,5 +19,6 @@ public class MyAppRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // TODO Auto-generated method stub
         System.out.println("Hello World");
+        upsService.start();
     }
 }

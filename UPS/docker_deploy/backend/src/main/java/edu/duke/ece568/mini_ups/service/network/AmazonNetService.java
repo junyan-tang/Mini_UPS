@@ -40,7 +40,7 @@ public class AmazonNetService implements ConnectionCloser {
 
     private void initializeConnection() {
         try{
-        String host = "vcm-40540.vm.duke.edu";
+        String host = "localhost";
         int port = 5678;
         this.socketService.startClient(host, port);
         this.out = this.socketService.out;

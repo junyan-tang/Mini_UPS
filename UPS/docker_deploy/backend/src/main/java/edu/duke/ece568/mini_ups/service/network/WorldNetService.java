@@ -30,13 +30,16 @@ public class WorldNetService implements ConnectionCloser {
     private WorldRespHandler worldRespHandler;
     public OutputStream out;
     public InputStream in;
-    final int TRUCK_NUM = 1000;
+    final int TRUCK_NUM = 10;
     final int TRUCK_X = 10;
     final int TRUCK_Y = 10;
 
     @Autowired
-    public WorldNetService(SocketService socketService) {
+    public WorldNetService(SocketService socketService, TruckRepository TruckRepository, PackageRepository PackageRepository, UserRepository UserRepository) {
         this.socketService = socketService;
+        this.TruckRepository = TruckRepository;
+        this.PackageRepository = PackageRepository;
+        this.UserRepository = UserRepository;
         initializeConnection();
     }
 
@@ -95,6 +98,7 @@ public class WorldNetService implements ConnectionCloser {
         try {
             uConnect.writeDelimitedTo(out);
             out.flush();
+            System.out.println("Sent UConnect to world");
         } catch (IOException e) {
             e.printStackTrace();
         }

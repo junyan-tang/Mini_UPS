@@ -26,7 +26,7 @@ public class WorldCmdSender {
         UGoPickup goPickup = UGoPickup.newBuilder()
                 .setTruckid(truckID)
                 .setWhid(whid)
-                .setSeqnum(seqnum++)
+                .setSeqnum(++seqnum)
                 .build();
         UCommands command = UCommands.newBuilder()
                 .addPickups(goPickup)
@@ -39,7 +39,7 @@ public class WorldCmdSender {
 
         UGoDeliver.Builder goDeliverBuilder = UGoDeliver.newBuilder()
                 .setTruckid(truckID)
-                .setSeqnum(seqnum++);
+                .setSeqnum(++seqnum);
         for (Package p : packages) {
             UDeliveryLocation location = UDeliveryLocation.newBuilder()
                     .setPackageid(p.getPackageId())
@@ -64,7 +64,7 @@ public class WorldCmdSender {
                 .build();
         UGoDeliver goDeliver = UGoDeliver.newBuilder()
                 .setTruckid(truckID)
-                .setSeqnum(seqnum++)
+                .setSeqnum(++seqnum)
                 .addPackages(location)
                 .build();
         UCommands command = UCommands.newBuilder()
@@ -78,15 +78,15 @@ public class WorldCmdSender {
         UErr err = UErr.newBuilder()
                 .setErr(error)
                 .setOriginseqnum(originSeqNum)
-                .setSeqnum(seqnum++)
+                .setSeqnum(++seqnum)
                 .build();
         err.writeTo(outputStream);
         outputStream.flush();
     }
 
-    public void sendAck(long seqnum) throws Exception {
+    public void sendAck(long seq) throws Exception {
         UCommands command = UCommands.newBuilder()
-                .addAcks(seqnum)
+                .addAcks(seq)
                 .build();
         command.writeTo(outputStream);
         outputStream.flush();

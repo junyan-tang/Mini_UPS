@@ -31,7 +31,7 @@ public class AmazonCmdSender {
         UTruckArrival arrival = UTruckArrival.newBuilder()
                 .setPackageID(packageID)
                 .setTruckID(truckID)
-                .setSeqnum(seqnum++)
+                .setSeqnum(++seqnum)
                 .build();
 
         UCommand command = UCommand.newBuilder()
@@ -44,7 +44,7 @@ public class AmazonCmdSender {
     public void sendDeliveryConfirmation(long packageID) throws IOException {
         Udelivered delivered = Udelivered.newBuilder()
                 .setPackageID(packageID)
-                .setSeqnum(seqnum++)
+                .setSeqnum(++seqnum)
                 .build();
 
         UCommand command = UCommand.newBuilder()
@@ -58,12 +58,14 @@ public class AmazonCmdSender {
         UcheckUsernameResponse response = UcheckUsernameResponse.newBuilder()
                 .setUpsUsername(username)
                 .setUpsUserID(userID)
-                .setSeqnum(seqnum++)
+                .setSeqnum(++seqnum)
                 .build();
 
         UCommand command = UCommand.newBuilder()
                 .addCheckUser(response)
                 .build();
+
+        System.out.println("Sending username check response: " + response.toString());
 
         sendUCommand(command);
     }
@@ -71,7 +73,7 @@ public class AmazonCmdSender {
     public void sendDelivered(long packageID) throws IOException {
         Udelivered delivered = Udelivered.newBuilder()
                 .setPackageID(packageID)
-                .setSeqnum(seqnum++)
+                .setSeqnum(++seqnum)
                 .build();
 
         UCommand command = UCommand.newBuilder()
@@ -85,7 +87,7 @@ public class AmazonCmdSender {
         Err error = Err.newBuilder()
                 .setErr(errMsg)
                 .setOriginseqnum(originSeqNum)
-                .setSeqnum(seqnum++)
+                .setSeqnum(++seqnum)
                 .build();
 
         UCommand command = UCommand.newBuilder()
