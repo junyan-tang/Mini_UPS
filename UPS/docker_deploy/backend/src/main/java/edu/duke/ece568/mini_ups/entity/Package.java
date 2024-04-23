@@ -100,6 +100,26 @@ public class Package {
         return users;
     }
 
+    public Truck getTruck() {
+        return truck;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
     public void setUser(Users users) {
         this.users = users;
     }

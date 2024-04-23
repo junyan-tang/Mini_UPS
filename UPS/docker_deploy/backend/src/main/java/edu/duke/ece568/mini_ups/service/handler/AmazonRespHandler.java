@@ -20,8 +20,8 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
 @Service
 public class AmazonRespHandler {
-    //private UserRepository userRepository;
-    //private PackageRepository packageRepository;
+    // private UserRepository userRepository;
+    // private PackageRepository packageRepository;
     private UserService userService;
     private PackageService packageService;
     private ItemService itemService;
@@ -84,7 +84,7 @@ public class AmazonRespHandler {
                 newPackage.setDestinationY(order.getDestinationInfo().getY());
                 packageService.save(newPackage);
 
-                for(int i=0;i<order.getProductInfoCount();i++){
+                for (int i = 0; i < order.getProductInfoCount(); i++) {
                     Item item = new Item();
                     item.setPackages(newPackage);
                     item.setProductId(order.getProductInfo(i).getProductID());
@@ -92,7 +92,6 @@ public class AmazonRespHandler {
                     item.setQuantity(order.getProductInfo(i).getCount());
                     itemService.save(item);
                 }
-                
 
                 worldCmdSender.sendPickups(truck.getTruckId(), order.getWarehouseInfo().getWarehouseID());
                 return;
@@ -105,6 +104,22 @@ public class AmazonRespHandler {
     private void handleStartDelivery(ACommand command) {
         for (AStartDelivery delivery : command.getToStartList()) {
             System.out.println("Start delivery for package " + delivery.getPackageID());
+            Package p = packageService.findById(delivery.getPackageID());
+            if (p == null) {
+                try {
+                    amazonCmdSender.sendError("Package does not exist", delivery.getSeqnum());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                continue;
+            }
+            p.setStatus("delivering");
+            packageService.save(p);
+            try {
+                worldCmdSender.sendDelivery(p.getTruck().getTruckId(), p);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
