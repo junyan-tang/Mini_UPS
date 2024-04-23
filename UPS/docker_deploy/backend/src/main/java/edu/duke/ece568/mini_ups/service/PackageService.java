@@ -23,7 +23,7 @@ public class PackageService {
             username = principal.toString();
         }
 
-        return packageRepository.findAllByUserUsername(username);
+        return packageRepository.findAllByUsersUsername(username);
     }
 
     public Package findPackageById(Long id) {
