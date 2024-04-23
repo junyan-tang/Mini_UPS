@@ -26,11 +26,11 @@ public class Package {
     private Date expectedArrivalTime;
 
     @ManyToOne
-    @JoinColumn(name = "truckid", nullable = true)
+    @JoinColumn(name = "truckId", nullable = true)
     private Truck truck;
 
     @ManyToOne
-    @JoinColumn(name = "userid", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private Users users;
 
     @OneToMany(mappedBy = "packages")

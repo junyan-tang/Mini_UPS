@@ -17,7 +17,7 @@ public class Item {
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "packageid", nullable = true)
+    @JoinColumn(name = "packageId", nullable = true)
     private Package packages;
 
     public Long getItemId() {

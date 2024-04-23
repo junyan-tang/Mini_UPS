@@ -12,7 +12,7 @@ import jakarta.persistence.OneToMany;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userid;
+    private Long userId;
     private String username;
     private String password;
     private String email;
@@ -24,10 +24,10 @@ public class Users {
     public Users() {}
 
     public Long getUserid() {
-        return userid;
+        return userId;
     }
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setUserid(Long userId) {
+        this.userId = userId;
     }
     public String getUsername() {
         return username;
