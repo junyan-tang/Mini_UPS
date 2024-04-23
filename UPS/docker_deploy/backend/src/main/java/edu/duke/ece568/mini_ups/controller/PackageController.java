@@ -26,7 +26,7 @@ public class PackageController {
     @GetMapping("/package/details/{id}")
     @PreAuthorize("hasRole('USER')")
     public String packageDetails(@PathVariable Long id, Model model) {
-        model.addAttribute("package", packageService.findPackageById(id));
+        model.addAttribute("package", packageService.findById(id));
         return "package-details";
     }
 

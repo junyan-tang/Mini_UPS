@@ -1,12 +1,12 @@
-// package edu.duke.ece568.mini_ups.service.network;
+package edu.duke.ece568.mini_ups.service.network;
 
-// import java.io.IOException;
-// import java.io.InputStream;
-// import java.io.OutputStream;
-// import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.entity.Truck;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
@@ -21,24 +21,24 @@ import edu.duke.ece568.mini_ups.service.handler.WorldRespHandler;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
-// @Service
-// public class WorldNetService implements ConnectionCloser {
-//     private SocketService socketService;
-//     private TruckRepository TruckRepository;
-//     private PackageRepository PackageRepository;
-//     private UserRepository UserRepository;
-//     private WorldRespHandler worldRespHandler;
-//     public OutputStream out;
-//     public InputStream in;
-//     final int TRUCK_NUM = 1000;
-//     final int TRUCK_X = 10;
-//     final int TRUCK_Y = 10;
+@Service
+public class WorldNetService implements ConnectionCloser {
+    private SocketService socketService;
+    private TruckRepository TruckRepository;
+    private PackageRepository PackageRepository;
+    private UserRepository UserRepository;
+    private WorldRespHandler worldRespHandler;
+    public OutputStream out;
+    public InputStream in;
+    final int TRUCK_NUM = 1000;
+    final int TRUCK_X = 10;
+    final int TRUCK_Y = 10;
 
-//     @Autowired
-//     public WorldNetService(SocketService socketService) {
-//         this.socketService = socketService;
-//         initializeConnection();
-//     }
+    @Autowired
+    public WorldNetService(SocketService socketService) {
+        this.socketService = socketService;
+        initializeConnection();
+    }
 
     public void setworldRespHandlerACmdSender(AmazonCmdSender amazonCmdSender) {
         this.worldRespHandler.setAmazonCmdSender(amazonCmdSender);
@@ -59,20 +59,20 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
         }
     }
 
-//     // public WorldNetService() {
-//     //     String host = "localhost";
-//     //     int port = 12345;
-//     //     this.socketService = new SocketService();
-//     //     this.socketService.startClient(host, port);
-//     //     this.out = this.socketService.out;
-//     //     this.in = this.socketService.in;
-//     //     this.worldResHandler = new WorldRespHandler(this);
-//     // }
+    // public WorldNetService() {
+    //     String host = "localhost";
+    //     int port = 12345;
+    //     this.socketService = new SocketService();
+    //     this.socketService.startClient(host, port);
+    //     this.out = this.socketService.out;
+    //     this.in = this.socketService.in;
+    //     this.worldResHandler = new WorldRespHandler(this);
+    // }
 
-//     // @Bean
-//     // public WorldNetService worldNetService() {
-//     //     return new WorldNetService();
-//     // }
+    // @Bean
+    // public WorldNetService worldNetService() {
+    //     return new WorldNetService();
+    // }
 
     public void sendUConnect(Long worldId, boolean isAmazon) {
         UConnect.Builder uConnectBuilder = UConnect.newBuilder()
@@ -128,19 +128,19 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
         }
     }
 
-//     private void sendAcksIfNecessary(UResponses response) throws IOException {
-//         List<Long> acks = response.getAcksList();
-//         if (!acks.isEmpty()) {
-//             UCommands commands = UCommands.newBuilder()
-//                     .addAllAcks(acks)
-//                     .build();
-//             commands.writeDelimitedTo(out);
-//             out.flush();
-//         }
-//     }
+    private void sendAcksIfNecessary(UResponses response) throws IOException {
+        List<Long> acks = response.getAcksList();
+        if (!acks.isEmpty()) {
+            UCommands commands = UCommands.newBuilder()
+                    .addAllAcks(acks)
+                    .build();
+            commands.writeDelimitedTo(out);
+            out.flush();
+        }
+    }
 
-//     @Override
-//     public void closeConnection() {
-//         socketService.stopClient();
-//     }
-// }
+    @Override
+    public void closeConnection() {
+        socketService.stopClient();
+    }
+}

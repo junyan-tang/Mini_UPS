@@ -1,4 +1,4 @@
-// package edu.duke.ece568.mini_ups.service.handler;
+package edu.duke.ece568.mini_ups.service.handler;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,17 +21,14 @@ import edu.duke.ece568.mini_ups.service.network.ConnectionCloser;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
-// @Service
-// public class WorldRespHandler {
+@Service
+public class WorldRespHandler {
 
     private ConnectionCloser connectionCloser;
     private UserService userService;
     private PackageService packageService;
     private ItemService itemService;
     private TruckService truckService;
-    // private UserRepository userRepository;
-    // private PackageRepository packageRepository;
-    // private TruckRepository truckRepository;
     private AmazonCmdSender amazonCmdSender;
     private WorldCmdSender worldCmdSender;
 
@@ -65,16 +62,16 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
         handleErrors(response);
     }
 
-//     private void handleFinished(UResponses response) {
-//         if (response.hasFinished()) {
-//             boolean isFinished = response.getFinished();
-//             System.out.println("Finished field: " + isFinished);
-//             if (isFinished) {
-//                 System.out.println("Server has finished processing commands and will close the connection.");
-//                 connectionCloser.closeConnection();
-//             }
-//         }
-//     }
+    private void handleFinished(UResponses response) {
+        if (response.hasFinished()) {
+            boolean isFinished = response.getFinished();
+            System.out.println("Finished field: " + isFinished);
+            if (isFinished) {
+                System.out.println("Server has finished processing commands and will close the connection.");
+                connectionCloser.closeConnection();
+            }
+        }
+    }
 
     private void handleCompletions(UResponses response) {
         for (UFinished finished : response.getCompletionsList()) {
@@ -126,19 +123,19 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
         }
     }
 
-//     private void handleTruckStatusUpdates(UResponses response) {
-//         if (!response.getTruckstatusList().isEmpty()) {
-//             System.out.println("Truck status updates:");
-//             for (UTruck truck : response.getTruckstatusList()) {
-//                 System.out.println("Truck " + truck.getTruckid() + " is " + truck.getStatus() + " at (" + truck.getX()
-//                         + ", " + truck.getY() + ")");
-//             }
-//         }
-//     }
+    private void handleTruckStatusUpdates(UResponses response) {
+        if (!response.getTruckstatusList().isEmpty()) {
+            System.out.println("Truck status updates:");
+            for (UTruck truck : response.getTruckstatusList()) {
+                System.out.println("Truck " + truck.getTruckid() + " is " + truck.getStatus() + " at (" + truck.getX()
+                        + ", " + truck.getY() + ")");
+            }
+        }
+    }
 
-//     private void handleErrors(UResponses response) {
-//         for (UErr error : response.getErrorList()) {
-//             System.out.println("Error: " + error.getErr() + " from sequence number: " + error.getOriginseqnum());
-//         }
-//     }
-// }
+    private void handleErrors(UResponses response) {
+        for (UErr error : response.getErrorList()) {
+            System.out.println("Error: " + error.getErr() + " from sequence number: " + error.getOriginseqnum());
+        }
+    }
+}
