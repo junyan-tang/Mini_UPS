@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UErr;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UDeliveryLocation;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UGoDeliver;
@@ -70,6 +71,16 @@ public class WorldCmdSender {
                 .addDeliveries(goDeliver)
                 .build();
         command.writeTo(outputStream);
+        outputStream.flush();
+    }
+
+    public void sendError(String error, long originSeqNum) throws Exception {
+        UErr err = UErr.newBuilder()
+                .setErr(error)
+                .setOriginseqnum(originSeqNum)
+                .setSeqnum(seqnum++)
+                .build();
+        err.writeTo(outputStream);
         outputStream.flush();
     }
 

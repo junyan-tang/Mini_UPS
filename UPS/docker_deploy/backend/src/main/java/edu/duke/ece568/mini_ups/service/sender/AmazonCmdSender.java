@@ -68,6 +68,19 @@ public class AmazonCmdSender {
         sendUCommand(command);
     }
 
+    public void sendDelivered(long packageID) throws IOException {
+        Udelivered delivered = Udelivered.newBuilder()
+                .setPackageID(packageID)
+                .setSeqnum(seqnum++)
+                .build();
+
+        UCommand command = UCommand.newBuilder()
+                .addDelivered(delivered)
+                .build();
+
+        sendUCommand(command);
+    }
+
     public void sendError(String errMsg, long originSeqNum) throws IOException {
         Err error = Err.newBuilder()
                 .setErr(errMsg)

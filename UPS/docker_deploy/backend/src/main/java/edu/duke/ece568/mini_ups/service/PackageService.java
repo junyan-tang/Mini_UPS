@@ -1,6 +1,7 @@
 package edu.duke.ece568.mini_ups.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,10 @@ public class PackageService {
 
     public List<Package> findByStatusAndTruckIdAndLocation(String status, Integer truckId, int x, int y) {
         return packageRepository.findByStatusAndTruckTruckIdAndLocation(status, truckId, x, y);
+    }
+
+    public Optional<Package> findByStatusAndTruckIdAndPackageId(String status, Integer truckId, long packageId) {
+        return packageRepository.findByStatusAndTruckIdAndPackageId(status, truckId, packageId);
     }
 
     public int updateStatus(Long packageId, String status) {

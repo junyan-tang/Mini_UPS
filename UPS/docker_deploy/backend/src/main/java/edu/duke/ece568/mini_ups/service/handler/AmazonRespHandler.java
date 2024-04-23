@@ -126,6 +126,20 @@ public class AmazonRespHandler {
     private void handleCheckUsername(ACommand command) {
         for (ACheckUsername checkUser : command.getCheckUsersList()) {
             System.out.println("Check username for " + checkUser.getUpsUsername());
+            Users user = userService.findByUsername(checkUser.getUpsUsername());
+            if (user == null) {
+                try {
+                    amazonCmdSender.sendError("User does not exist", checkUser.getSeqnum());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    amazonCmdSender.sendUsernameCheckResponse(user.getUsername(), user.getUserid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

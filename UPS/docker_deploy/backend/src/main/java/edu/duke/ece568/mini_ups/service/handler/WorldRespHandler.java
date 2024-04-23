@@ -1,11 +1,13 @@
 package edu.duke.ece568.mini_ups.service.handler;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import edu.duke.ece568.mini_ups.entity.Package;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UDeliveryMade;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UErr;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UFinished;
@@ -18,11 +20,6 @@ import edu.duke.ece568.mini_ups.service.UserService;
 import edu.duke.ece568.mini_ups.service.network.ConnectionCloser;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
-
-import edu.duke.ece568.mini_ups.entity.Package;
-import edu.duke.ece568.mini_ups.entity.Truck;
-import edu.duke.ece568.mini_ups.entity.Users;
-import edu.duke.ece568.mini_ups.entity.Item;
 
 @Service
 public class WorldRespHandler {
@@ -63,7 +60,7 @@ public class WorldRespHandler {
         System.out.println("Received response from world: " + response);
         handleFinished(response);
         handleCompletions(response);
-        handleDeliveries(response);
+        handleDelivered(response);
         handleTruckStatusUpdates(response);
         handleErrors(response);
     }
@@ -102,10 +99,30 @@ public class WorldRespHandler {
         }
     }
 
-    private void handleDeliveries(UResponses response) {
+    private void handleDelivered(UResponses response) {
         for (UDeliveryMade delivery : response.getDeliveredList()) {
             System.out.println(
                     "Delivery made by truck " + delivery.getTruckid() + " for package " + delivery.getPackageid());
+            Optional<Package> p = packageService.findByStatusAndTruckIdAndPackageId("delivering", delivery.getTruckid(), delivery.getPackageid());
+            if (p.isPresent()) {
+                Package pack = p.get();
+                pack.setStatus("delivered");
+                packageService.save(pack);
+                try {
+                    amazonCmdSender.sendDelivered(pack.getPackageId());
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
+            }
+            else{
+                System.out.println("Package not found");
+                try{
+                    worldCmdSender.sendError("Package not found", delivery.getSeqnum());
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
+                
+            }
         }
     }
 
