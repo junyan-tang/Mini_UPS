@@ -26,4 +26,16 @@ public class TruckService {
         List<Truck> nonBusyTrucks = truckRepository.findNonBusyTrucksSortedByProximity(destinationX, destinationY, limit);
         return nonBusyTrucks.isEmpty() ? null : nonBusyTrucks.get(0);
     }
+
+    public void updateStatus(int truckId, String status) {
+        truckRepository.updateStatus(truckId, status);
+    }
+
+    public void updateLocation(int truckId, int x, int y) {
+        truckRepository.updateLocation(truckId, x, y);
+    }
+
+    public void save(Truck truck) {
+        truckRepository.save(truck);
+    }
 }

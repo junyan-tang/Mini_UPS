@@ -1,5 +1,7 @@
 package edu.duke.ece568.mini_ups.service.handler;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -9,29 +11,40 @@ import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UErr;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UFinished;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UTruck;
-import edu.duke.ece568.mini_ups.repository.PackageRepository;
-import edu.duke.ece568.mini_ups.repository.TruckRepository;
-import edu.duke.ece568.mini_ups.repository.UserRepository;
+import edu.duke.ece568.mini_ups.service.ItemService;
+import edu.duke.ece568.mini_ups.service.PackageService;
+import edu.duke.ece568.mini_ups.service.TruckService;
+import edu.duke.ece568.mini_ups.service.UserService;
 import edu.duke.ece568.mini_ups.service.network.ConnectionCloser;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
+
+import edu.duke.ece568.mini_ups.entity.Package;
+import edu.duke.ece568.mini_ups.entity.Truck;
+import edu.duke.ece568.mini_ups.entity.Users;
+import edu.duke.ece568.mini_ups.entity.Item;
 
 @Service
 public class WorldRespHandler {
 
     private ConnectionCloser connectionCloser;
-    private UserRepository userRepository;
-    private PackageRepository packageRepository;
-    private TruckRepository truckRepository;
+    private UserService userService;
+    private PackageService packageService;
+    private ItemService itemService;
+    private TruckService truckService;
+    // private UserRepository userRepository;
+    // private PackageRepository packageRepository;
+    // private TruckRepository truckRepository;
     private AmazonCmdSender amazonCmdSender;
     private WorldCmdSender worldCmdSender;
 
     @Autowired
-    private WorldRespHandler(UserRepository userRepository, PackageRepository packageRepository,
-            TruckRepository truckRepository) {
-        this.userRepository = userRepository;
-        this.packageRepository = packageRepository;
-        this.truckRepository = truckRepository;
+    private WorldRespHandler(UserService userService, PackageService packageService,
+            TruckService truckService, ItemService itemService) {
+        this.userService = userService;
+        this.packageService = packageService;
+        this.truckService = truckService;
+        this.itemService = itemService;
     }
 
     public WorldRespHandler(@Qualifier("worldNetService") ConnectionCloser connectionCloser) {
@@ -41,9 +54,11 @@ public class WorldRespHandler {
     public void setAmazonCmdSender(AmazonCmdSender amazonCmdSender) {
         this.amazonCmdSender = amazonCmdSender;
     }
+
     public void setWorldCmdSender(WorldCmdSender worldCmdSender) {
         this.worldCmdSender = worldCmdSender;
     }
+
     public void handle(UResponses response) {
         System.out.println("Received response from world: " + response);
         handleFinished(response);
@@ -68,7 +83,22 @@ public class WorldRespHandler {
         for (UFinished finished : response.getCompletionsList()) {
             System.out.println("Truck " + finished.getTruckid() + " completed at (" + finished.getX() + ", "
                     + finished.getY() + ") with status: " + finished.getStatus());
-            
+            truckService.updateStatus(finished.getTruckid(), finished.getStatus());
+            truckService.updateLocation(finished.getTruckid(), finished.getX(), finished.getY());
+
+            if (finished.getStatus().equals("arrive warehouse")) {
+                List<Package> packages = packageService.findByStatusAndTruckIdAndLocation("packing",
+                        finished.getTruckid(), finished.getX(), finished.getY());
+                for (Package p : packages) {
+                    p.setStatus("loading");
+                    packageService.save(p);
+                    try {
+                        amazonCmdSender.sendTruckArrival(p.getPackageId(), finished.getTruckid());
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e);
+                    }
+                }
+            }
         }
     }
 

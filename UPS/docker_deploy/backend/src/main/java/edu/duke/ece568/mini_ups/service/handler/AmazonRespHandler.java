@@ -11,29 +11,31 @@ import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACheckUsername;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.AOrderATruck;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.AStartDelivery;
-import edu.duke.ece568.mini_ups.repository.ItemRepository;
-import edu.duke.ece568.mini_ups.repository.PackageRepository;
-import edu.duke.ece568.mini_ups.repository.UserRepository;
+import edu.duke.ece568.mini_ups.service.ItemService;
+import edu.duke.ece568.mini_ups.service.PackageService;
 import edu.duke.ece568.mini_ups.service.TruckService;
+import edu.duke.ece568.mini_ups.service.UserService;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
 @Service
 public class AmazonRespHandler {
-    private UserRepository userRepository;
-    private PackageRepository packageRepository;
-    private ItemRepository itemRepository;
-    // private TruckRepository truckRepository;
+    //private UserRepository userRepository;
+    //private PackageRepository packageRepository;
+    private UserService userService;
+    private PackageService packageService;
+    private ItemService itemService;
     private TruckService truckService;
     private AmazonCmdSender amazonCmdSender;
     private WorldCmdSender worldCmdSender;
 
     @Autowired
-    public AmazonRespHandler(UserRepository userRepository, PackageRepository packageRepository,
-            TruckService truckService) {
-        this.userRepository = userRepository;
-        this.packageRepository = packageRepository;
+    public AmazonRespHandler(UserService userService, PackageService packageService,
+            TruckService truckService, ItemService itemService) {
+        this.userService = userService;
+        this.packageService = packageService;
         this.truckService = truckService;
+        this.itemService = itemService;
     }
 
     public void setAmazonCmdSender(AmazonCmdSender amazonCmdSender) {
@@ -57,7 +59,7 @@ public class AmazonRespHandler {
             try {
                 worldCmdSender.sendAck(order.getSeqnum());
                 System.out.println("Order truck for package " + order.getPackageID());
-                Users user = userRepository.findByUsername(order.getUpsUsername());
+                Users user = userService.findByUsername(order.getUpsUsername());
 
                 if (user == null) {
                     amazonCmdSender.sendError("User does not exist", order.getSeqnum());
@@ -80,7 +82,7 @@ public class AmazonRespHandler {
                 newPackage.setCurrentY(order.getWarehouseInfo().getY());
                 newPackage.setDestinationX(order.getDestinationInfo().getX());
                 newPackage.setDestinationY(order.getDestinationInfo().getY());
-                packageRepository.save(newPackage);
+                packageService.save(newPackage);
 
                 for(int i=0;i<order.getProductInfoCount();i++){
                     Item item = new Item();
@@ -88,7 +90,7 @@ public class AmazonRespHandler {
                     item.setProductId(order.getProductInfo(i).getProductID());
                     item.setDescription(order.getProductInfo(i).getDescription());
                     item.setQuantity(order.getProductInfo(i).getCount());
-                    itemRepository.save(item);
+                    itemService.save(item);
                 }
                 
 

@@ -12,6 +12,10 @@ import java.util.List;
 
 @Repository
 public interface PackageRepository extends JpaRepository<Package, Long>{
+
+    @Query("select p from Package p where p.packageId = :packageId")
+    Package findByPackageId(long packageId);
+
     @Query("select p from Package p where p.users.userId = :userId")
     List<Package> findByUsersUserId(long userId);
 
@@ -20,6 +24,12 @@ public interface PackageRepository extends JpaRepository<Package, Long>{
 
     @Query("select p from Package p where p.truck.truckId = :truckId")
     List<Package> findByStatus(String status);
+
+    @Query("select p from Package p where p.status = :status and p.truck.truckId = :truckId")
+    List<Package> findByStatusAndTruckTruckId(String status, Integer truckId);
+
+    @Query("select p from Package p where p.status = :status and p.truck.truckId = :truckId and p.currentX = :x and p.currentY = :y")
+    List<Package> findByStatusAndTruckTruckIdAndLocation(String status, Integer truckId, int x, int y);
 
     @Modifying
     @Transactional
