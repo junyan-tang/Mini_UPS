@@ -15,7 +15,7 @@ import edu.duke.ece568.mini_ups.service.handler.AmazonRespHandler;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
-//@Service
+@Service
 public class AmazonNetService implements ConnectionCloser {
     private SocketService socketService;
     private UserRepository userRepository;
@@ -39,11 +39,14 @@ public class AmazonNetService implements ConnectionCloser {
     }
 
     private void initializeConnection() {
-        String host = "amazon-server-host";
-        int port = 23456;
+        try{
+        String host = "vcm-40540.vm.duke.edu";
+        int port = 5678;
         this.socketService.startClient(host, port);
         this.out = this.socketService.out;
-        this.in = this.socketService.in;
+        this.in = this.socketService.in;}catch(Exception e){
+            throw new RuntimeException("Failed to start socket connection", e);
+        }
     }
 
 //     // public AmazonNetService() {

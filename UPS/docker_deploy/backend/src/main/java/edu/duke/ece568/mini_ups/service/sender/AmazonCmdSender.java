@@ -17,7 +17,7 @@ public class AmazonCmdSender {
     private OutputStream outputStream;
     private Long seqnum = 0L;
 
-    public AmazonCmdSender(OutputStream output) {
+    public void setAmazonCmdSender(OutputStream output) {
         outputStream = output;
     }
 
