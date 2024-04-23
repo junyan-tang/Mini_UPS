@@ -1,5 +1,8 @@
 package edu.duke.ece568.mini_ups.service.handler;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UDeliveryMade;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UErr;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UFinished;
@@ -7,11 +10,12 @@ import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UTruck;
 import edu.duke.ece568.mini_ups.service.network.ConnectionCloser;
 
+@Service
 public class WorldRespHandler {
 
     private ConnectionCloser connectionCloser;
 
-    public WorldRespHandler(ConnectionCloser connectionCloser) {
+    public WorldRespHandler(@Qualifier("worldNetService") ConnectionCloser connectionCloser) {
         this.connectionCloser = connectionCloser;
     }
 

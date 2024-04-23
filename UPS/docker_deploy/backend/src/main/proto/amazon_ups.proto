@@ -9,7 +9,7 @@ message ACommand {
 
 message AOrderATruck {
     required int64 packageID = 1;
-    required product productInfo=2;
+    repeated product productInfo=2;
     required warehouse warehouseInfo=3;
     required destination destinationInfo=4;
     required string upsUsername = 5;

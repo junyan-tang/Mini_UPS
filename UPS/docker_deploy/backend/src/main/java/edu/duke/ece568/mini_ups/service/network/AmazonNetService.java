@@ -5,14 +5,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
-import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.repository.UserRepository;
 import edu.duke.ece568.mini_ups.service.handler.AmazonRespHandler;
 
+//@Service
 public class AmazonNetService implements ConnectionCloser {
     private SocketService socketService;
     private UserRepository userRepository;
@@ -20,20 +21,36 @@ public class AmazonNetService implements ConnectionCloser {
     public OutputStream out;
     public InputStream in;
 
-    public AmazonNetService() {
+    @Autowired
+    public AmazonNetService(SocketService socketService, UserRepository userRepository, AmazonRespHandler amazonResHandler) {
+        this.socketService = socketService;
+        this.userRepository = userRepository;
+        this.amazonResHandler = amazonResHandler;
+        initializeConnection();
+    }
+
+    private void initializeConnection() {
         String host = "amazon-server-host";
-        int port = 23456; 
-        this.socketService = new SocketService();
+        int port = 23456;
         this.socketService.startClient(host, port);
         this.out = this.socketService.out;
         this.in = this.socketService.in;
-        this.amazonResHandler = new AmazonRespHandler();
     }
 
-    @Bean
-    public AmazonNetService amazonNetService() {
-        return new AmazonNetService();
-    }
+    // public AmazonNetService() {
+    //     String host = "amazon-server-host";
+    //     int port = 23456; 
+    //     this.socketService = new SocketService();
+    //     this.socketService.startClient(host, port);
+    //     this.out = this.socketService.out;
+    //     this.in = this.socketService.in;
+    //     this.amazonResHandler = new AmazonRespHandler();
+    // }
+
+    // @Bean
+    // public AmazonNetService amazonNetService() {
+    //     return new AmazonNetService();
+    // }
 
     public ACommand receiveCommand() throws IOException {
         try {

@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import org.springframework.stereotype.Service;
+@Service
 public class SocketService {
     public OutputStream out;
     public InputStream in;
@@ -14,7 +16,7 @@ public class SocketService {
             in = socket.getInputStream();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to connect to server", e);
         }
     }
     public void stopClient() {

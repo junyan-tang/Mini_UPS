@@ -1,7 +1,13 @@
 package edu.duke.ece568.mini_ups.service.handler;
 
-import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.*;
+import org.springframework.stereotype.Service;
 
+import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACheckUsername;
+import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
+import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.AOrderATruck;
+import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.AStartDelivery;
+
+@Service
 public class AmazonRespHandler {
     public AmazonRespHandler() {
     }
