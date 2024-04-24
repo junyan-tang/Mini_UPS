@@ -24,16 +24,6 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String handleLogin(@RequestParam String username, @RequestParam String password) {
-
-        if ("admin".equals(username) && "password".equals(password)) {
-            return "redirect:/home";
-        } else {
-            return "login";
-        }
-    }
-
     @PostMapping("/register")
     public String handleRegistration(@ModelAttribute UserDto userDto) {
         UserService.registerNewUser(userDto);

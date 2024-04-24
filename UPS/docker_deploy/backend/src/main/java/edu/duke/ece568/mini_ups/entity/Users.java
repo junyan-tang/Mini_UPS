@@ -3,17 +3,23 @@ package edu.duke.ece568.mini_ups.entity;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
+@Table(name = "users")
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
     private String email;
 
