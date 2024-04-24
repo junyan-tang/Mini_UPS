@@ -23,6 +23,7 @@ public class WorldCmdSender {
     }
 
     public void sendPickups(int truckID, int whid) throws Exception {
+        System.out.println("sendPickups");
         UGoPickup goPickup = UGoPickup.newBuilder()
                 .setTruckid(truckID)
                 .setWhid(whid)
@@ -31,7 +32,7 @@ public class WorldCmdSender {
         UCommands command = UCommands.newBuilder()
                 .addPickups(goPickup)
                 .build();
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
@@ -52,11 +53,12 @@ public class WorldCmdSender {
         UCommands command = UCommands.newBuilder()
                 .addDeliveries(goDeliver)
                 .build();
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
     public void sendDelivery(int truckID, Package p) throws Exception {
+        System.out.println("sendDelivery: packageid: " + p.getPackageId() + " truckid: " + truckID);
         UDeliveryLocation location = UDeliveryLocation.newBuilder()
                 .setPackageid(p.getPackageId())
                 .setX(p.getDestinationX())
@@ -70,7 +72,7 @@ public class WorldCmdSender {
         UCommands command = UCommands.newBuilder()
                 .addDeliveries(goDeliver)
                 .build();
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
@@ -80,7 +82,7 @@ public class WorldCmdSender {
                 .setOriginseqnum(originSeqNum)
                 .setSeqnum(++seqnum)
                 .build();
-        err.writeTo(outputStream);
+        err.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
@@ -88,7 +90,7 @@ public class WorldCmdSender {
         UCommands command = UCommands.newBuilder()
                 .addAcks(seq)
                 .build();
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 }

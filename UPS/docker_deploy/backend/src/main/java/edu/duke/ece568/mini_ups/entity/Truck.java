@@ -11,7 +11,7 @@ public class Truck {
     private Integer truckId;
     private Integer currentX;
     private Integer currentY;
-    private String status;
+    private String status;   // IDLE, TRAVELLING, LOADING, DELIVERING,ARRIVE WAREHOUSE
     private Integer warehouseId;
 
     @OneToMany(mappedBy = "truck")

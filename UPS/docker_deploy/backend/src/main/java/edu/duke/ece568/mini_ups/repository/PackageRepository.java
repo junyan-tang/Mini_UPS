@@ -16,25 +16,25 @@ import jakarta.transaction.Transactional;
 public interface PackageRepository extends JpaRepository<Package, Long>{
 
     @Query("select p from Package p where p.packageId = :packageId")
-    Package findByPackageId(long packageId);
+    Package findByPackageId(@Param("packageId") long packageId);
 
     @Query("select p from Package p where p.users.userId = :userId")
-    List<Package> findByUsersUserId(long userId);
+    List<Package> findByUsersUserId(@Param("userId") long userId);
 
     @Query("select p from Package p where p.users.username = :userName")
-    List<Package> findByUsersUserName(String userName);
+    List<Package> findByUsersUserName(@Param("userName") String userName);
 
-    @Query("select p from Package p where p.truck.truckId = :truckId")
-    List<Package> findByStatus(String status);
+    @Query("select p from Package p where p.status = :status")
+    List<Package> findByStatus(@Param("status") String status);
 
     @Query("select p from Package p where p.status = :status and p.truck.truckId = :truckId")
-    List<Package> findByStatusAndTruckTruckId(String status, Integer truckId);
+    List<Package> findByStatusAndTruckTruckId(@Param("status") String status, @Param("truckId") Integer truckId);
 
     @Query("select p from Package p where p.status = :status and p.truck.truckId = :truckId and p.currentX = :x and p.currentY = :y")
-    List<Package> findByStatusAndTruckTruckIdAndLocation(String status, Integer truckId, int x, int y);
+    List<Package> findByStatusAndTruckTruckIdAndLocation(@Param("status") String status,@Param("truckId") Integer truckId,@Param("x") int x,@Param("y") int y);
 
     @Query("select p from Package p where p.status = :status and p.truck.truckId = :truckId and p.packageId = :packageId")
-    Optional<Package> findByStatusAndTruckIdAndPackageId(String status, Integer truckId, long packageId);
+    Optional<Package> findByStatusAndTruckIdAndPackageId(@Param("status") String status,@Param("truckId") Integer truckId,@Param("packageId") long packageId);
 
     @Modifying
     @Transactional

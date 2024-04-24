@@ -34,7 +34,7 @@ public class UpsService {
         worldNetService.setworldRespHandlerWCmdSender(worldCmdSender);
 
         System.out.println("UPS Service Started");
-        worldNetService.sendUConnect(7L, false);
+        worldNetService.sendUConnect(10L, false);
         if (worldNetService.receiveUconnected()) {
             System.out.println("Connected to World");
         } else {

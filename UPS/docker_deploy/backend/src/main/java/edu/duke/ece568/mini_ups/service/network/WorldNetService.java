@@ -35,11 +35,12 @@ public class WorldNetService implements ConnectionCloser {
     final int TRUCK_Y = 10;
 
     @Autowired
-    public WorldNetService(SocketService socketService, TruckRepository TruckRepository, PackageRepository PackageRepository, UserRepository UserRepository) {
+    public WorldNetService(SocketService socketService, TruckRepository TruckRepository, PackageRepository PackageRepository, UserRepository UserRepository, WorldRespHandler worldRespHandler) {
         this.socketService = socketService;
         this.TruckRepository = TruckRepository;
         this.PackageRepository = PackageRepository;
         this.UserRepository = UserRepository;
+        this.worldRespHandler = worldRespHandler;
         initializeConnection();
     }
 
@@ -51,12 +52,12 @@ public class WorldNetService implements ConnectionCloser {
     }
     private void initializeConnection() {
         try {
-            String host = "localhost"; // 替换为实际的host
+            String host = "vcm-38181.vm.duke.edu"; // 替换为实际的host
             int port = 12345; // 替换为实际的port
             this.socketService.startClient(host, port);
             this.out = this.socketService.out;
             this.in = this.socketService.in;
-            this.worldRespHandler = new WorldRespHandler(this);
+            this.worldRespHandler.setConnectionCloser(this);
         } catch (Exception e) {
             throw new RuntimeException("Failed to start socket connection", e);
         }
@@ -92,6 +93,7 @@ public class WorldNetService implements ConnectionCloser {
             truck.setTruckId(i);
             truck.setCurrentX(TRUCK_X);
             truck.setCurrentY(TRUCK_Y);
+            truck.setStatus("IDLE");
             TruckRepository.save(truck);
         }
         UConnect uConnect = uConnectBuilder.build();
@@ -128,20 +130,21 @@ public class WorldNetService implements ConnectionCloser {
             }
             return response;
         } catch (IOException e) {
-            throw new IOException("Failed to receive message from world");
+            return null;
+            //throw new IOException("Failed to receive message from world");
         }
     }
 
-    private void sendAcksIfNecessary(UResponses response) throws IOException {
-        List<Long> acks = response.getAcksList();
-        if (!acks.isEmpty()) {
-            UCommands commands = UCommands.newBuilder()
-                    .addAllAcks(acks)
-                    .build();
-            commands.writeDelimitedTo(out);
-            out.flush();
-        }
-    }
+    // private void sendAcksIfNecessary(UResponses response) throws IOException {
+    //     List<Long> acks = response.getAcksList();
+    //     if (!acks.isEmpty()) {
+    //         UCommands commands = UCommands.newBuilder()
+    //                 .addAllAcks(acks)
+    //                 .build();
+    //         commands.writeDelimitedTo(out);
+    //         out.flush();
+    //     }
+    // }
 
     @Override
     public void closeConnection() {

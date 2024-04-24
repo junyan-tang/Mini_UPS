@@ -36,7 +36,7 @@ public class WorldRespHandler {
     private WorldCmdSender worldCmdSender;
 
     @Autowired
-    private WorldRespHandler(UserService userService, PackageService packageService,
+    public WorldRespHandler(UserService userService, PackageService packageService,
             TruckService truckService, ItemService itemService) {
         this.userService = userService;
         this.packageService = packageService;
@@ -44,9 +44,14 @@ public class WorldRespHandler {
         this.itemService = itemService;
     }
 
-    public WorldRespHandler(@Qualifier("worldNetService") ConnectionCloser connectionCloser) {
+    public void setConnectionCloser(ConnectionCloser connectionCloser) {
         this.connectionCloser = connectionCloser;
     }
+
+    // public WorldRespHandler(@Qualifier("worldNetService") ConnectionCloser
+    // connectionCloser) {
+    // this.connectionCloser = connectionCloser;
+    // }
 
     public void setAmazonCmdSender(AmazonCmdSender amazonCmdSender) {
         this.amazonCmdSender = amazonCmdSender;
@@ -78,50 +83,56 @@ public class WorldRespHandler {
 
     private void handleCompletions(UResponses response) {
         for (UFinished finished : response.getCompletionsList()) {
-            System.out.println("Truck " + finished.getTruckid() + " completed at (" + finished.getX() + ", "
-                    + finished.getY() + ") with status: " + finished.getStatus());
-            truckService.updateStatus(finished.getTruckid(), finished.getStatus());
-            truckService.updateLocation(finished.getTruckid(), finished.getX(), finished.getY());
+            try {
+                worldCmdSender.sendAck(finished.getSeqnum());
 
-            if (finished.getStatus().equals("arrive warehouse")) {
-                List<Package> packages = packageService.findByStatusAndTruckIdAndLocation("packing",
-                        finished.getTruckid(), finished.getX(), finished.getY());
-                for (Package p : packages) {
-                    p.setStatus("loading");
-                    packageService.save(p);
-                    try {
+                System.out.println("Truck " + finished.getTruckid() + " completed at (" + finished.getX() + ", "
+                        + finished.getY() + ") with status: " + finished.getStatus());
+                truckService.updateStatus(finished.getTruckid(), finished.getStatus());
+                truckService.updateLocation(finished.getTruckid(), finished.getX(), finished.getY());
+
+                if (finished.getStatus().equals("ARRIVE WAREHOUSE")) {
+                    List<Package> packages = packageService.findByStatusAndTruckIdAndLocation("Wait for Pick Up",
+                            finished.getTruckid(), finished.getX(), finished.getY());
+                    for (Package p : packages) {
+                        // p.setStatus("LOADING");
+                        // packageService.save(p);
+
                         amazonCmdSender.sendTruckArrival(p.getPackageId(), finished.getTruckid());
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e);
+
                     }
                 }
+            } catch (Exception e) {
+                System.out.println("Error: " + e);
             }
         }
     }
 
     private void handleDelivered(UResponses response) {
         for (UDeliveryMade delivery : response.getDeliveredList()) {
-            System.out.println(
-                    "Delivery made by truck " + delivery.getTruckid() + " for package " + delivery.getPackageid());
-            Optional<Package> p = packageService.findByStatusAndTruckIdAndPackageId("delivering", delivery.getTruckid(), delivery.getPackageid());
-            if (p.isPresent()) {
-                Package pack = p.get();
-                pack.setStatus("delivered");
-                packageService.save(pack);
-                try {
-                    amazonCmdSender.sendDelivered(pack.getPackageId());
-                } catch (Exception e) {
-                    System.out.println("Error: " + e);
-                }
-            }
-            else{
-                System.out.println("Package not found");
-                try{
+            try {
+                worldCmdSender.sendAck(delivery.getSeqnum());
+                System.out.println(
+                        "Delivery made by truck " + delivery.getTruckid() + " for package " + delivery.getPackageid());
+                Optional<Package> p = packageService.findByStatusAndTruckIdAndPackageId("Out for Delivery",
+                        delivery.getTruckid(), delivery.getPackageid());
+                if (p.isPresent()) {
+                    Package pack = p.get();
+                    pack.setStatus("Delivered for Delivery");
+                    packageService.save(pack);
+                    try {
+                        amazonCmdSender.sendDelivered(pack.getPackageId());
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e);
+                    }
+                } else {
+                    System.out.println("Package not found");
+
                     worldCmdSender.sendError("Package not found", delivery.getSeqnum());
-                } catch (Exception e) {
-                    System.out.println("Error: " + e);
+
                 }
-                
+            } catch (Exception e) {
+                System.out.println("Error: " + e);
             }
         }
     }

@@ -14,6 +14,7 @@ public class SocketService {
         try {
             socket = new Socket(host, port);
             System.out.println("Connected to server at " + host + ":" + port);
+            socket.setSoTimeout(1000);
             out = socket.getOutputStream();
             in = socket.getInputStream();
         }

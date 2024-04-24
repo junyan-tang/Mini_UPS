@@ -40,8 +40,8 @@ public class AmazonNetService implements ConnectionCloser {
 
     private void initializeConnection() {
         try{
-        String host = "localhost";
-        int port = 5678;
+        String host = "vcm-38181.vm.duke.edu";
+        int port = 34567;
         this.socketService.startClient(host, port);
         this.out = this.socketService.out;
         this.in = this.socketService.in;}catch(Exception e){
@@ -72,8 +72,9 @@ public class AmazonNetService implements ConnectionCloser {
                 amazonResHandler.handle(command);                
             }
             return command;
-        } catch (IOException e) {
-            throw new IOException("Failed to receive message from Amazon");
+        } catch (Exception e) {
+            return null;
+            //throw new IOException("Failed to receive message from Amazon");
         }
     }
 

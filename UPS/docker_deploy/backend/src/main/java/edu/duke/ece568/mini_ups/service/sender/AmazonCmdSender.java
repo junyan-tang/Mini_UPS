@@ -22,12 +22,13 @@ public class AmazonCmdSender {
     }
 
     public void sendUCommand(UCommand command) throws IOException {
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
 
     public void sendTruckArrival(long packageID, int truckID) throws IOException {
+        
         UTruckArrival arrival = UTruckArrival.newBuilder()
                 .setPackageID(packageID)
                 .setTruckID(truckID)
@@ -38,10 +39,12 @@ public class AmazonCmdSender {
                 .addArrived(arrival)
                 .build();
 
+        System.out.println("Sending truck arrival: " + packageID + " " + truckID);
         sendUCommand(command);
     }
 
     public void sendDeliveryConfirmation(long packageID) throws IOException {
+        
         Udelivered delivered = Udelivered.newBuilder()
                 .setPackageID(packageID)
                 .setSeqnum(++seqnum)
@@ -51,6 +54,7 @@ public class AmazonCmdSender {
                 .addDelivered(delivered)
                 .build();
 
+        System.out.println("Sending delivery confirmation: " + packageID);
         sendUCommand(command);
     }
 
