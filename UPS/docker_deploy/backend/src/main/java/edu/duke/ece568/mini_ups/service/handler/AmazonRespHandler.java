@@ -69,6 +69,7 @@ public class AmazonRespHandler {
                 Truck truck = truckService.findBestAvailableTruck(order.getDestinationInfo().getX(),
                         order.getDestinationInfo().getY());
                 if (truck == null) {
+                    System.out.println("No available trucks");
                     amazonCmdSender.sendError("No available trucks", order.getSeqnum());
                     continue;
                 }
@@ -115,7 +116,7 @@ public class AmazonRespHandler {
                     }
                     continue;
                 }
-                p.setStatus("delivering");
+                p.setStatus("DELIVERING");
                 packageService.save(p);
 
                 worldCmdSender.sendDelivery(p.getTruck().getTruckId(), p);

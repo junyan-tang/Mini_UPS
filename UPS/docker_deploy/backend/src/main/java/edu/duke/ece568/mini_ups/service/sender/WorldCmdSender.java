@@ -31,7 +31,7 @@ public class WorldCmdSender {
         UCommands command = UCommands.newBuilder()
                 .addPickups(goPickup)
                 .build();
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
@@ -52,7 +52,7 @@ public class WorldCmdSender {
         UCommands command = UCommands.newBuilder()
                 .addDeliveries(goDeliver)
                 .build();
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
@@ -70,7 +70,7 @@ public class WorldCmdSender {
         UCommands command = UCommands.newBuilder()
                 .addDeliveries(goDeliver)
                 .build();
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
@@ -80,7 +80,7 @@ public class WorldCmdSender {
                 .setOriginseqnum(originSeqNum)
                 .setSeqnum(++seqnum)
                 .build();
-        err.writeTo(outputStream);
+        err.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 
@@ -88,7 +88,7 @@ public class WorldCmdSender {
         UCommands command = UCommands.newBuilder()
                 .addAcks(seq)
                 .build();
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 }

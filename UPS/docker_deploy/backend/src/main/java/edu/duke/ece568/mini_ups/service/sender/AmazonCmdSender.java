@@ -22,7 +22,7 @@ public class AmazonCmdSender {
     }
 
     public void sendUCommand(UCommand command) throws IOException {
-        command.writeTo(outputStream);
+        command.writeDelimitedTo(outputStream);
         outputStream.flush();
     }
 

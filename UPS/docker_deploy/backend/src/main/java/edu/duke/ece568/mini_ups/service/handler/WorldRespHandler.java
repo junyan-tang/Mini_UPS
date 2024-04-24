@@ -36,17 +36,21 @@ public class WorldRespHandler {
     private WorldCmdSender worldCmdSender;
 
     @Autowired
-    private WorldRespHandler(UserService userService, PackageService packageService,
-            TruckService truckService, ItemService itemService) {
+    public WorldRespHandler(UserService userService, PackageService packageService,
+                            TruckService truckService, ItemService itemService) {
         this.userService = userService;
         this.packageService = packageService;
         this.truckService = truckService;
-        this.itemService = itemService;
+        this.itemService = itemService;        
     }
 
-    public WorldRespHandler(@Qualifier("worldNetService") ConnectionCloser connectionCloser) {
+    public void setConnectionCloser(ConnectionCloser connectionCloser) {
         this.connectionCloser = connectionCloser;
     }
+
+    // public WorldRespHandler(@Qualifier("worldNetService") ConnectionCloser connectionCloser) {
+    //     this.connectionCloser = connectionCloser;
+    // }
 
     public void setAmazonCmdSender(AmazonCmdSender amazonCmdSender) {
         this.amazonCmdSender = amazonCmdSender;
@@ -83,11 +87,11 @@ public class WorldRespHandler {
             truckService.updateStatus(finished.getTruckid(), finished.getStatus());
             truckService.updateLocation(finished.getTruckid(), finished.getX(), finished.getY());
 
-            if (finished.getStatus().equals("arrive warehouse")) {
+            if (finished.getStatus().equals("ARRIVE WAREHOUSE")) {
                 List<Package> packages = packageService.findByStatusAndTruckIdAndLocation("packing",
                         finished.getTruckid(), finished.getX(), finished.getY());
                 for (Package p : packages) {
-                    p.setStatus("loading");
+                    p.setStatus("LOADING");
                     packageService.save(p);
                     try {
                         amazonCmdSender.sendTruckArrival(p.getPackageId(), finished.getTruckid());
@@ -103,7 +107,7 @@ public class WorldRespHandler {
         for (UDeliveryMade delivery : response.getDeliveredList()) {
             System.out.println(
                     "Delivery made by truck " + delivery.getTruckid() + " for package " + delivery.getPackageid());
-            Optional<Package> p = packageService.findByStatusAndTruckIdAndPackageId("delivering", delivery.getTruckid(), delivery.getPackageid());
+            Optional<Package> p = packageService.findByStatusAndTruckIdAndPackageId("DELIVERING", delivery.getTruckid(), delivery.getPackageid());
             if (p.isPresent()) {
                 Package pack = p.get();
                 pack.setStatus("delivered");

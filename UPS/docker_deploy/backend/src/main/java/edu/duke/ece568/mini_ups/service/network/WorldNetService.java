@@ -35,11 +35,12 @@ public class WorldNetService implements ConnectionCloser {
     final int TRUCK_Y = 10;
 
     @Autowired
-    public WorldNetService(SocketService socketService, TruckRepository TruckRepository, PackageRepository PackageRepository, UserRepository UserRepository) {
+    public WorldNetService(SocketService socketService, TruckRepository TruckRepository, PackageRepository PackageRepository, UserRepository UserRepository, WorldRespHandler worldRespHandler) {
         this.socketService = socketService;
         this.TruckRepository = TruckRepository;
         this.PackageRepository = PackageRepository;
         this.UserRepository = UserRepository;
+        this.worldRespHandler = worldRespHandler;
         initializeConnection();
     }
 
@@ -56,7 +57,7 @@ public class WorldNetService implements ConnectionCloser {
             this.socketService.startClient(host, port);
             this.out = this.socketService.out;
             this.in = this.socketService.in;
-            this.worldRespHandler = new WorldRespHandler(this);
+            this.worldRespHandler.setConnectionCloser(this);
         } catch (Exception e) {
             throw new RuntimeException("Failed to start socket connection", e);
         }
@@ -92,6 +93,7 @@ public class WorldNetService implements ConnectionCloser {
             truck.setTruckId(i);
             truck.setCurrentX(TRUCK_X);
             truck.setCurrentY(TRUCK_Y);
+            truck.setStatus("IDLE");
             TruckRepository.save(truck);
         }
         UConnect uConnect = uConnectBuilder.build();
