@@ -29,9 +29,6 @@ public class WorldRespHandler {
     private PackageService packageService;
     private ItemService itemService;
     private TruckService truckService;
-    // private UserRepository userRepository;
-    // private PackageRepository packageRepository;
-    // private TruckRepository truckRepository;
     private AmazonCmdSender amazonCmdSender;
     private WorldCmdSender worldCmdSender;
 

@@ -1,19 +1,19 @@
-package edu.duke.ece568.mini_ups;
+// package edu.duke.ece568.mini_ups;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.boot.CommandLineRunner;
+// import org.springframework.stereotype.Component;
 
-import edu.duke.ece568.mini_ups.service.UpsService;
+// import edu.duke.ece568.mini_ups.service.UpsService;
 
-@Component
-public class MyAppRunner implements CommandLineRunner {
+// @Component
+// public class MyAppRunner implements CommandLineRunner {
 
-    private final UpsService upsService;
-    @Autowired
-    public MyAppRunner(UpsService upsService) {
-        this.upsService = upsService;
-    }
+//     private final UpsService upsService;
+//     @Autowired
+//     public MyAppRunner(UpsService upsService) {
+//         this.upsService = upsService;
+//     }
 
     @Override
     public void run(String... args) throws Exception {

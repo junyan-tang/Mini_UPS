@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.entity.Package;
 import edu.duke.ece568.mini_ups.repository.PackageRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Service
 public class PackageService {
@@ -52,6 +54,18 @@ public class PackageService {
 
     public int updateDestination(Long packageId, int x, int y) {
         return packageRepository.updateDestination(packageId, x, y);
+    }
+
+    public List<Package> findAllPackages() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        return packageRepository.findByUsersUserName(username);
     }
 
 }

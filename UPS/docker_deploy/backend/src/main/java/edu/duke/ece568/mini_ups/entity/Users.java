@@ -3,20 +3,25 @@ package edu.duke.ece568.mini_ups.entity;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
+@Table(name = "users")
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
     private String email;
-    private String address;
 
     @OneToMany(mappedBy = "users")
     private List<Package> packages;
@@ -47,13 +52,7 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getAddress() {
-        return address;
-    }
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
+    
     public List<Package> getPackages() {
         return packages;
     }

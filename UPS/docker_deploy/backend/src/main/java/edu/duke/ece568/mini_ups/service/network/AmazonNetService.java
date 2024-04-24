@@ -49,20 +49,20 @@ public class AmazonNetService implements ConnectionCloser {
         }
     }
 
-    // public AmazonNetService() {
-    //     String host = "amazon-server-host";
-    //     int port = 23456; 
-    //     this.socketService = new SocketService();
-    //     this.socketService.startClient(host, port);
-    //     this.out = this.socketService.out;
-    //     this.in = this.socketService.in;
-    //     this.amazonResHandler = new AmazonRespHandler();
-    // }
+//     // public AmazonNetService() {
+//     //     String host = "amazon-server-host";
+//     //     int port = 23456; 
+//     //     this.socketService = new SocketService();
+//     //     this.socketService.startClient(host, port);
+//     //     this.out = this.socketService.out;
+//     //     this.in = this.socketService.in;
+//     //     this.amazonResHandler = new AmazonRespHandler();
+//     // }
 
-    // @Bean
-    // public AmazonNetService amazonNetService() {
-    //     return new AmazonNetService();
-    // }
+//     // @Bean
+//     // public AmazonNetService amazonNetService() {
+//     //     return new AmazonNetService();
+//     // }
 
     public ACommand receiveCommand() throws IOException {
         try {
