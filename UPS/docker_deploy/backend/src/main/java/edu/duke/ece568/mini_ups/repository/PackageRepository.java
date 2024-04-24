@@ -19,10 +19,10 @@ public interface PackageRepository extends JpaRepository<Package, Long>{
     Package findByPackageId(long packageId);
 
     @Query("select p from Package p where p.users.userId = :userId")
-    List<Package> findByUsersUserId(long userId);
+    List<Package> findByUsersUserId(@Param("userId") long userId);
 
     @Query("select p from Package p where p.users.username = :userName")
-    List<Package> findByUsersUserName(String userName);
+    List<Package> findByUsersUserName(@Param("userName") String userName);
 
     @Query("select p from Package p where p.truck.truckId = :truckId")
     List<Package> findByStatus(String status);

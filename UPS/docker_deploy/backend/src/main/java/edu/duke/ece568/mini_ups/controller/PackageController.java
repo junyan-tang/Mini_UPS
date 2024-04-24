@@ -5,8 +5,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import java.util.List;
+import edu.duke.ece568.mini_ups.entity.Package;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import edu.duke.ece568.mini_ups.service.PackageService;
@@ -17,22 +20,25 @@ public class PackageController {
     private PackageService packageService;
 
     @GetMapping("/packages")
-    @PreAuthorize("hasRole('USER')")
-    public String listPackages(Model model) {
-        model.addAttribute("packages", packageService.findAllPackages());
+    public String listPackages(Model model, Authentication authentication) {
+        String username = authentication.getName();
+        List<Package> packages = packageService.findByUserName(username);
+        model.addAttribute("packages", packages);
         return "packages";
     }
 
     @GetMapping("/package/details/{id}")
-    @PreAuthorize("hasRole('USER')")
-    public String packageDetails(@PathVariable Long id, Model model) {
-        model.addAttribute("package", packageService.findById(id));
-        return "package-details";
+    public String packageDetails(@PathVariable("id") Long id, Model model) {
+        Package currPackage = packageService.findById(id);
+        if (currPackage == null) {
+            return "error";
+        }
+        model.addAttribute("package", currPackage);
+        return "package_detail";
     }
 
     @GetMapping("/track")
-    public ModelAndView trackPackage(@RequestParam("packageId") String packageId) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/package/details/" + packageId);
-        return modelAndView;
+    public String trackPackage(@RequestParam("packageId") String packageId) {
+        return "redirect:/package/details/" + packageId;
     }
 }

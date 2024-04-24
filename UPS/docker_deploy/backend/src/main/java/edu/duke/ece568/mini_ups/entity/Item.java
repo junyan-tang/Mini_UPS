@@ -13,7 +13,6 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
     private Long productId;
-    // private String name;
     private String description;
     private Integer quantity;
 
