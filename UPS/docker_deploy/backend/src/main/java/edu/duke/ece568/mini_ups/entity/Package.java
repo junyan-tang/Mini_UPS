@@ -15,10 +15,10 @@ import java.util.List;
 @Entity
 public class Package {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long packageId;
 
-    private String status;
+    private String status;   // Wait for Pick Up, Out for Delivery, Delivered for Delivery
     private Integer currentX;
     private Integer currentY;
     private Integer destinationX;

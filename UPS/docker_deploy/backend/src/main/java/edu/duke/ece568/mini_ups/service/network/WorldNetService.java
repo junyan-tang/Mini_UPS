@@ -52,7 +52,7 @@ public class WorldNetService implements ConnectionCloser {
     }
     private void initializeConnection() {
         try {
-            String host = "localhost"; // 替换为实际的host
+            String host = "vcm-38181.vm.duke.edu"; // 替换为实际的host
             int port = 12345; // 替换为实际的port
             this.socketService.startClient(host, port);
             this.out = this.socketService.out;
@@ -130,20 +130,21 @@ public class WorldNetService implements ConnectionCloser {
             }
             return response;
         } catch (IOException e) {
-            throw new IOException("Failed to receive message from world");
+            return null;
+            //throw new IOException("Failed to receive message from world");
         }
     }
 
-    private void sendAcksIfNecessary(UResponses response) throws IOException {
-        List<Long> acks = response.getAcksList();
-        if (!acks.isEmpty()) {
-            UCommands commands = UCommands.newBuilder()
-                    .addAllAcks(acks)
-                    .build();
-            commands.writeDelimitedTo(out);
-            out.flush();
-        }
-    }
+    // private void sendAcksIfNecessary(UResponses response) throws IOException {
+    //     List<Long> acks = response.getAcksList();
+    //     if (!acks.isEmpty()) {
+    //         UCommands commands = UCommands.newBuilder()
+    //                 .addAllAcks(acks)
+    //                 .build();
+    //         commands.writeDelimitedTo(out);
+    //         out.flush();
+    //     }
+    // }
 
     @Override
     public void closeConnection() {

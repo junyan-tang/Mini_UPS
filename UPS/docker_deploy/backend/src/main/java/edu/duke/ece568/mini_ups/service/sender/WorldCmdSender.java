@@ -23,6 +23,7 @@ public class WorldCmdSender {
     }
 
     public void sendPickups(int truckID, int whid) throws Exception {
+        System.out.println("sendPickups");
         UGoPickup goPickup = UGoPickup.newBuilder()
                 .setTruckid(truckID)
                 .setWhid(whid)
@@ -57,6 +58,7 @@ public class WorldCmdSender {
     }
 
     public void sendDelivery(int truckID, Package p) throws Exception {
+        System.out.println("sendDelivery: packageid: " + p.getPackageId() + " truckid: " + truckID);
         UDeliveryLocation location = UDeliveryLocation.newBuilder()
                 .setPackageid(p.getPackageId())
                 .setX(p.getDestinationX())

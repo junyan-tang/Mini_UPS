@@ -73,12 +73,14 @@ public class AmazonRespHandler {
                     amazonCmdSender.sendError("No available trucks", order.getSeqnum());
                     continue;
                 }
+                truckService.updateStatus(truck.getTruckId(), "TRAVELLING");
 
                 // 创建新包裹
                 Package newPackage = new Package();
+                newPackage.setPackageId(order.getPackageID());
                 newPackage.setTruck(truck);
                 newPackage.setUser(user);
-                newPackage.setStatus("packing");
+                newPackage.setStatus("Wait for Pick Up");
                 newPackage.setCurrentX(order.getWarehouseInfo().getX());
                 newPackage.setCurrentY(order.getWarehouseInfo().getY());
                 newPackage.setDestinationX(order.getDestinationInfo().getX());
@@ -116,7 +118,7 @@ public class AmazonRespHandler {
                     }
                     continue;
                 }
-                p.setStatus("DELIVERING");
+                p.setStatus("Out for Delivery");
                 packageService.save(p);
 
                 worldCmdSender.sendDelivery(p.getTruck().getTruckId(), p);
