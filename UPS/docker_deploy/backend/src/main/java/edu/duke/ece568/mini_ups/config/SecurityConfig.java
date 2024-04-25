@@ -33,7 +33,13 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/packages", true)
                 .permitAll()
             )
-            .logout(logout -> logout.permitAll());
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
+                .permitAll());
         return http.build();
     }
 

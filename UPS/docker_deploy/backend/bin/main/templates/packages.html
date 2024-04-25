@@ -30,11 +30,26 @@
         a:hover {
             color: navy;
         }
+        .btn-logout {
+            background-color: #FFB500;
+            border-color: #FFB500;
+            position:absolute;
+            top: 10px;
+            left:10px;
+            z-index:1000;
+        }
+        .btn-logout:hover{
+            background-color: #E0A400;
+            border-color: #CC9500;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="text-center">Your Packages</h1>
+        <div class="d-flex justify-content-end">
+            <a th:href="@{/logout}" class="btn btn-logout">Log Out</a>
+        </div>
         <table class="table table-striped">
             <thead class="header">
                 <tr>

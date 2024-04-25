@@ -30,7 +30,7 @@
         a:hover {
             color: navy;
         }
-        .btn-ups-yellow, .btn-secondary {
+        .btn-ups-yellow, .btn-secondary, .btn-logout {
             background-color: #FFB500;
             border-color: #FFB500;
             position:absolute;
@@ -38,7 +38,7 @@
             left:10px;
             z-index:1000;
         }
-        .btn-ups-yellow:hover, .btn-secondary:hover {
+        .btn-ups-yellow:hover, .btn-secondary:hover , .btn-logout:hover{
             background-color: #E0A400;
             border-color: #CC9500;
         }
@@ -81,7 +81,10 @@
 <body>
     <div class="container">
         <h1 class="text-center">Package Details</h1>
-        <div th:if="${package.status != 'Out for Delivery'}">
+        <div class="d-flex justify-content-end">
+            <a th:href="@{/logout}" class="btn btn-logout">Log Out</a>
+        </div>
+        <div th:if="${package.status != 'Out for Delivery' and package.status != 'Delivered'}">
             <a th:href="@{/package/modifyAddress/{id}(id=${package.packageId})}" class="btn btn-ups-yellow">Modify Address</a>
         </div>
         <div th:if="${package.status} == 'Out for Delivery'">
