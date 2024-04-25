@@ -115,7 +115,7 @@ public class WorldRespHandler {
                         delivery.getTruckid(), delivery.getPackageid());
                 if (p.isPresent()) {
                     Package pack = p.get();
-                    pack.setStatus("Delivered for Delivery");
+                    pack.setStatus("Delivered");
                     packageService.save(pack);
                     try {
                         amazonCmdSender.sendDelivered(pack.getPackageId());

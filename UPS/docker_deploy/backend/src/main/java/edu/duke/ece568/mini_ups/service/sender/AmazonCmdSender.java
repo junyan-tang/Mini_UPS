@@ -102,11 +102,14 @@ public class AmazonCmdSender {
     }
 
     public void sendAck(long originSeqNum) throws IOException {
+
+        System.out.println("Sending ack for seqnum: " + originSeqNum);
         UCommand command = UCommand.newBuilder()
                 .addAcks(originSeqNum)
                 .build();
 
         sendUCommand(command);
+        System.out.println("Sent ack for seqnum: " + originSeqNum);
     }
 
 }

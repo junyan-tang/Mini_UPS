@@ -47,8 +47,9 @@ message UCommand {
     repeated UTruckArrival arrived=1;
     repeated Udelivered delivered=2;
     repeated UcheckUsernameResponse checkUser=3;
-    repeated Err error=4;
-    repeated int64 acks=5;
+    repeated UChangeDestination changed=4;
+    repeated Err error=5;
+    repeated int64 acks=6;
 }
 
 message Err{
@@ -57,6 +58,12 @@ message Err{
     required int64 seqnum = 3;
 }
 
+
+message UChangeDestination{
+    required int64 packageID = 1;
+    required destination NewDestination = 2;
+    required int64 seqnum = 3;
+}
 
 message UTruckArrival {
     required int64 packageID = 1;
