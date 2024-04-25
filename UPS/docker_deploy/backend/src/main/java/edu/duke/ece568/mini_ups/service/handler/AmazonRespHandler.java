@@ -171,6 +171,8 @@ public class AmazonRespHandler {
                 p.setStatus("Out for Delivery");
                 packageService.save(p);
 
+                truckService.updateStatus(p.getTruck().getTruckId(), "DELIVERING");
+
                 worldCmdSender.sendDelivery(p.getTruck().getTruckId(), p);
             } catch (Exception e) {
                 e.printStackTrace();

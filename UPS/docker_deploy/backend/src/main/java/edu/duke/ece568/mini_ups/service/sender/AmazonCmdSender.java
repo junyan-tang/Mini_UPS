@@ -2,15 +2,16 @@ package edu.duke.ece568.mini_ups.service.sender;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.Socket;
 
 import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.Err;
+import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.UChangeDestination;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.UCommand;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.UTruckArrival;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.UcheckUsernameResponse;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.Udelivered;
+import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.destination;
 
 @Service
 public class AmazonCmdSender {
@@ -110,6 +111,24 @@ public class AmazonCmdSender {
 
         sendUCommand(command);
         System.out.println("Sent ack for seqnum: " + originSeqNum);
+    }
+
+    public void sendChangeDestination(long packageID, int x, int y) throws IOException {
+
+        destination des = destination.newBuilder()
+                .setX(x)
+                .setY(y)
+                .build();
+        UChangeDestination changeDestination = UChangeDestination.newBuilder()
+                .setPackageID(packageID)
+                .setNewDestination(des)
+                .setSeqnum(++seqnum)
+                .build();
+        UCommand command = UCommand.newBuilder()
+                .addChanged(changeDestination)
+                .build();
+
+        sendUCommand(command);
     }
 
 }

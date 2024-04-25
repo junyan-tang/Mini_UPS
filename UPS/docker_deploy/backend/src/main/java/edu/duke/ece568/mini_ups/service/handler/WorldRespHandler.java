@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.entity.Package;
+import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
+import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommandsOrBuilder;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UDeliveryMade;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UErr;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UFinished;
+import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UQuery;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UTruck;
 import edu.duke.ece568.mini_ups.service.ItemService;
@@ -60,11 +63,35 @@ public class WorldRespHandler {
 
     public void handle(UResponses response) {
         System.out.println("Received response from world: " + response);
+        handleQuery(response);
         handleFinished(response);
         handleCompletions(response);
         handleDelivered(response);
         handleTruckStatusUpdates(response);
         handleErrors(response);
+    }
+
+    public void sendTruckQueries(int truck_num) {
+        try {
+            worldCmdSender.sendTruckQueries(truck_num);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+    }
+
+    private void handleQuery(UResponses response) {
+        for (UTruck truck : response.getTruckstatusList()) {
+            try {
+                worldCmdSender.sendAck(truck.getSeqnum());
+                System.out.println(
+                        "Truck " + truck.getTruckid() + " is " + truck.getStatus() + " at (" + truck.getX() + ", "
+                                + truck.getY() + ")");
+                truckService.updateStatus(truck.getTruckid(), truck.getStatus());
+                truckService.updateLocation(truck.getTruckid(), truck.getX(), truck.getY());
+            } catch (Exception e) {
+                System.out.println("Error: " + e);
+            }
+        }
     }
 
     private void handleFinished(UResponses response) {
@@ -94,7 +121,7 @@ public class WorldRespHandler {
                     for (Package p : packages) {
                         // p.setStatus("LOADING");
                         // packageService.save(p);
-
+                        truckService.updateStatus(finished.getTruckid(), "LOADING");
                         amazonCmdSender.sendTruckArrival(p.getPackageId(), finished.getTruckid());
 
                     }

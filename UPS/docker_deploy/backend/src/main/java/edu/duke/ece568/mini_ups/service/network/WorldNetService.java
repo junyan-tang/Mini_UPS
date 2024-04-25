@@ -53,6 +53,7 @@ public class WorldNetService implements ConnectionCloser {
     private void initializeConnection() {
         try {
             String host = "vcm-38181.vm.duke.edu"; // 替换为实际的host
+            //String host = "vcm-41021.vm.duke.edu";
             int port = 12345; // 替换为实际的port
             this.socketService.startClient(host, port);
             this.out = this.socketService.out;
@@ -133,6 +134,10 @@ public class WorldNetService implements ConnectionCloser {
             return null;
             //throw new IOException("Failed to receive message from world");
         }
+    }
+
+    public void sendTruckQueries(){
+        worldRespHandler.sendTruckQueries(TRUCK_NUM);
     }
 
     // private void sendAcksIfNecessary(UResponses response) throws IOException {

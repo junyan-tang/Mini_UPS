@@ -34,7 +34,7 @@ public class UpsService {
         worldNetService.setworldRespHandlerWCmdSender(worldCmdSender);
 
         System.out.println("UPS Service Started");
-        worldNetService.sendUConnect(8L, false);
+        worldNetService.sendUConnect(6L, false);
         if (worldNetService.receiveUconnected()) {
             System.out.println("Connected to World");
         } else {
@@ -44,6 +44,7 @@ public class UpsService {
             try {
                 amazonNetService.receiveCommand();
                 worldNetService.receiveMessage();
+                worldNetService.sendTruckQueries();
             } catch (Exception e) {
                 e.printStackTrace();
             }
