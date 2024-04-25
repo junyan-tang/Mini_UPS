@@ -79,13 +79,21 @@ public class WorldRespHandler {
         }
     }
 
+    public void sendChangeDest(Long packageId, int x, int y) {
+        try {
+            amazonCmdSender.sendChangeDestination(packageId, x, y);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+    }
+
     private void handleQuery(UResponses response) {
         for (UTruck truck : response.getTruckstatusList()) {
             try {
                 worldCmdSender.sendAck(truck.getSeqnum());
-                System.out.println(
-                        "Truck " + truck.getTruckid() + " is " + truck.getStatus() + " at (" + truck.getX() + ", "
-                                + truck.getY() + ")");
+                // System.out.println(
+                //         "Truck " + truck.getTruckid() + " is " + truck.getStatus() + " at (" + truck.getX() + ", "
+                //                 + truck.getY() + ")");
                 truckService.updateStatus(truck.getTruckid(), truck.getStatus());
                 truckService.updateLocation(truck.getTruckid(), truck.getX(), truck.getY());
             } catch (Exception e) {

@@ -1,14 +1,17 @@
 package edu.duke.ece568.mini_ups.controller;
 
-import edu.duke.ece568.mini_ups.entity.Package;
-import edu.duke.ece568.mini_ups.service.PackageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import edu.duke.ece568.mini_ups.entity.Package;
+import edu.duke.ece568.mini_ups.service.CommandStore;
+import edu.duke.ece568.mini_ups.service.DestStruct;
+import edu.duke.ece568.mini_ups.service.PackageService;
 
 @Controller
 public class AddressController {
@@ -28,6 +31,8 @@ public class AddressController {
             currPackage.setDestinationX(newX);
             currPackage.setDestinationY(newY);
             packageService.save(currPackage);
+            DestStruct destStruct = new DestStruct(id, newX, newY);
+            CommandStore.pendingDest.add(destStruct);
             return "redirect:/package/details/" + id;
         }
         return "error";

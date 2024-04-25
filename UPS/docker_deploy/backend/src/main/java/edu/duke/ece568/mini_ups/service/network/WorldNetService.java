@@ -3,13 +3,11 @@ package edu.duke.ece568.mini_ups.service.network;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.entity.Truck;
-import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UConnect;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UConnected;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UInitTruck;
@@ -17,6 +15,8 @@ import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.repository.PackageRepository;
 import edu.duke.ece568.mini_ups.repository.TruckRepository;
 import edu.duke.ece568.mini_ups.repository.UserRepository;
+import edu.duke.ece568.mini_ups.service.CommandStore;
+import edu.duke.ece568.mini_ups.service.DestStruct;
 import edu.duke.ece568.mini_ups.service.handler.WorldRespHandler;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
@@ -30,7 +30,7 @@ public class WorldNetService implements ConnectionCloser {
     private WorldRespHandler worldRespHandler;
     public OutputStream out;
     public InputStream in;
-    final int TRUCK_NUM = 1;
+    final int TRUCK_NUM = 100;
     final int TRUCK_X = 10;
     final int TRUCK_Y = 10;
 
@@ -129,10 +129,18 @@ public class WorldNetService implements ConnectionCloser {
                 //sendAcksIfNecessary(response);
                 worldRespHandler.handle(response);               
             }
+            checkpedingDestinations();
             return response;
         } catch (IOException e) {
             return null;
             //throw new IOException("Failed to receive message from world");
+        }
+    }
+
+    public void checkpedingDestinations() {
+        while (!CommandStore.pendingDest.isEmpty()) {
+            DestStruct destStruct = CommandStore.pendingDest.poll();
+            worldRespHandler.sendChangeDest(destStruct.packageId, destStruct.newX, destStruct.newY);
         }
     }
 

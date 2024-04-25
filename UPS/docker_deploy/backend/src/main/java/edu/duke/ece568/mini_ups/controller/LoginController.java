@@ -33,4 +33,9 @@ public class LoginController {
     public String showRegistrationForm() {
         return "register";
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "home";
+    }
 }
