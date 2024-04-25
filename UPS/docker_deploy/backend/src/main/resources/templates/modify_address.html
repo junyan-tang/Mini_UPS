@@ -1,4 +1,4 @@
-{% comment %} <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Modify Address</title>
@@ -18,37 +18,18 @@
     <div class="container mt-5">
         <h1>Modify Address for Package <span th:text="${package.packageId}"></span></h1>
         <div class="row justify-content-center">
-            <div class="col-md-4">
-                <h2 class="mb-3">Login</h2>
-                <form th:action="@{/login}" method="post">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username:</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password:</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 mb-2">Login</button>
-                    <a href="/register" class="btn btn-secondary w-100">Register</a>
-                </form>
+            <form th:action="@{/package/updateAddress/{id}(id=${package.packageId})}" method="post">
+                <div class="mb-3">
+                    <label for="newAddress" class="form-label">New Address X:</label>
+                    <input type="number" class="form-control" id="destinationX" name="destinationX" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newAddress" class="form-label">New Address Y:</label>
+                    <input type="number" class="form-control" id="destinationY" name="destinationY" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Address</button>
             </div>
         </div>
     </div>
 </body>
-<body>
-    <div class="container">
-        <form th:action="@{/package/updateAddress/{id}(id=${package.packageId})}" method="post">
-            <div class="mb-3">
-                <label for="newAddress" class="form-label">New Address X:</label>
-                <input type="text" class="form-control" id="newAddress" name="newAddress" required>
-            </div>
-            <div class="mb-3">
-                <label for="newAddress" class="form-label">New Address X:</label>
-                <input type="text" class="form-control" id="newAddress" name="newAddress" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Update Address</button>
-        </form>
-    </div>
-</body>
-</html> {% endcomment %}
+</html> 

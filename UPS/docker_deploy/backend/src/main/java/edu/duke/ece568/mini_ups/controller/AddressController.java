@@ -20,7 +20,9 @@ public class AddressController {
     }
 
     @PostMapping("/package/updateAddress/{id}")
-    public String updateAddress(@PathVariable("id") Long id, @RequestParam Integer newX, @RequestParam Integer newY) {
+    public String updateAddress(@PathVariable("id") Long id, 
+                                @RequestParam("destinationX") Integer newX, 
+                                @RequestParam("destinationY") Integer newY) {
         Package currPackage = packageService.findById(id);
         if (currPackage != null) {
             currPackage.setDestinationX(newX);

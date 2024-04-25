@@ -84,6 +84,11 @@
         <div th:if="${package.status != 'Out for Delivery'}">
             <a th:href="@{/package/modifyAddress/{id}(id=${package.packageId})}" class="btn btn-ups-yellow">Modify Address</a>
         </div>
+        <div th:if="${package.status} == 'Out for Delivery'">
+            <div class="alert alert-warning" role="alert">
+                The final delivery address cannot be changed as the package is already out for delivery.
+            </div>
+        </div>
         <div class="detail-view">
             <h2>Package Information</h2>
             <p><strong>Current Location:</strong> <span th:text="${package.currentX + ', ' + package.currentY}">10, 20</span></p>
