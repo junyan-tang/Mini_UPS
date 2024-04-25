@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
+import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.AOrderATruck;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
 import edu.duke.ece568.mini_ups.repository.UserRepository;
+import edu.duke.ece568.mini_ups.service.CommandStore;
 import edu.duke.ece568.mini_ups.service.handler.AmazonRespHandler;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
@@ -71,10 +73,21 @@ public class AmazonNetService implements ConnectionCloser {
                 //sendAcksIfNecessary(command);
                 amazonResHandler.handle(command);                
             }
+            retryPendingOrders();
             return command;
         } catch (Exception e) {
             return null;
             //throw new IOException("Failed to receive message from Amazon");
+        }
+    }
+
+    private void retryPendingOrders() {
+        int size = CommandStore.pendingOrders.size(); // 获取当前队列大小
+        for (int i = 0; i < size; i++) {
+            AOrderATruck order = CommandStore.pendingOrders.poll();
+            if (order != null) {
+                amazonResHandler.handleAnOrderTruck(order);
+            }
         }
     }
 

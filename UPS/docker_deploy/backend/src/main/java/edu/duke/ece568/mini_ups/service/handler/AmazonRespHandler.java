@@ -11,6 +11,7 @@ import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACheckUsername;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.AOrderATruck;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.AStartDelivery;
+import edu.duke.ece568.mini_ups.service.CommandStore;
 import edu.duke.ece568.mini_ups.service.ItemService;
 import edu.duke.ece568.mini_ups.service.PackageService;
 import edu.duke.ece568.mini_ups.service.TruckService;
@@ -54,6 +55,54 @@ public class AmazonRespHandler {
         handleAck(command);
     }
 
+    public void handleAnOrderTruck(AOrderATruck order) {
+        try {
+            //amazonCmdSender.sendAck(order.getSeqnum());
+            System.out.println("Order truck for package " + order.getPackageID());
+            Users user = userService.findByUsername(order.getUpsUsername());
+
+            if (user == null) {
+                amazonCmdSender.sendError("User does not exist", order.getSeqnum());
+                return;
+            }
+
+            Truck truck = truckService.findBestAvailableTruck(order.getDestinationInfo().getX(),
+                    order.getDestinationInfo().getY());
+            if (truck == null) {
+                System.out.println("No available trucks");
+                CommandStore.pendingOrders.add(order);
+                //amazonCmdSender.sendError("No available trucks", order.getSeqnum());
+                return;
+            }
+            truckService.updateStatus(truck.getTruckId(), "TRAVELLING");
+
+            // 创建新包裹
+            Package newPackage = new Package();
+            newPackage.setPackageId(order.getPackageID());
+            newPackage.setTruck(truck);
+            newPackage.setUser(user);
+            newPackage.setStatus("Wait for Pick Up");
+            newPackage.setCurrentX(order.getWarehouseInfo().getX());
+            newPackage.setCurrentY(order.getWarehouseInfo().getY());
+            newPackage.setDestinationX(order.getDestinationInfo().getX());
+            newPackage.setDestinationY(order.getDestinationInfo().getY());
+            packageService.save(newPackage);
+
+            for (int i = 0; i < order.getProductInfoCount(); i++) {
+                Item item = new Item();
+                item.setPackages(newPackage);
+                item.setProductId(order.getProductInfo(i).getProductID());
+                item.setDescription(order.getProductInfo(i).getDescription());
+                item.setQuantity(order.getProductInfo(i).getCount());
+                itemService.save(item);
+            }
+
+            worldCmdSender.sendPickups(truck.getTruckId(), order.getWarehouseInfo().getWarehouseID());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void handleOrderTruck(ACommand command) {
         for (AOrderATruck order : command.getToOrderList()) {
             try {
@@ -70,7 +119,8 @@ public class AmazonRespHandler {
                         order.getDestinationInfo().getY());
                 if (truck == null) {
                     System.out.println("No available trucks");
-                    amazonCmdSender.sendError("No available trucks", order.getSeqnum());
+                    CommandStore.pendingOrders.add(order);
+                    //amazonCmdSender.sendError("No available trucks", order.getSeqnum());
                     continue;
                 }
                 truckService.updateStatus(truck.getTruckId(), "TRAVELLING");
@@ -135,7 +185,8 @@ public class AmazonRespHandler {
                 System.out.println("Check username for " + checkUser.getUpsUsername());
                 Users user = userService.findByUsername(checkUser.getUpsUsername());
                 if (user == null) {
-                    amazonCmdSender.sendError("User does not exist", checkUser.getSeqnum());
+                    amazonCmdSender.sendUsernameCheckResponse(checkUser.getUpsUsername(), -1);
+                    // amazonCmdSender.sendError("User does not exist", checkUser.getSeqnum());
 
                 } else {
                     amazonCmdSender.sendUsernameCheckResponse(user.getUsername(), user.getUserid());

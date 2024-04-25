@@ -30,7 +30,7 @@ public class WorldNetService implements ConnectionCloser {
     private WorldRespHandler worldRespHandler;
     public OutputStream out;
     public InputStream in;
-    final int TRUCK_NUM = 10;
+    final int TRUCK_NUM = 1;
     final int TRUCK_X = 10;
     final int TRUCK_Y = 10;
 

@@ -18,7 +18,7 @@ public class Package {
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long packageId;
 
-    private String status;   // Wait for Pick Up, Out for Delivery, Delivered for Delivery
+    private String status;   // Wait for Pick Up, Out for Delivery, Delivered
     private Integer currentX;
     private Integer currentY;
     private Integer destinationX;
