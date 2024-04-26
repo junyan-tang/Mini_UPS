@@ -29,4 +29,9 @@ public interface TruckRepository extends JpaRepository<Truck, Integer>{
     @Transactional
     @Query("UPDATE Truck t SET t.currentX = :x, t.currentY = :y WHERE t.truckId = :truckId")
     int updateLocation(@Param("truckId") int truckId,@Param("x") int x,@Param("y") int y);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Truck t")
+    void deleteAllTrucks();
 }

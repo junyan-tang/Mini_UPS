@@ -9,9 +9,12 @@ import edu.duke.ece568.mini_ups.service.UpsService;
 @Component
 public class MyAppRunner implements CommandLineRunner {
 
+    private final DatabaseInitializer databaseInitializer;
     private final UpsService upsService;
+    
     @Autowired
-    public MyAppRunner(UpsService upsService) {
+    public MyAppRunner(DatabaseInitializer databaseInitializer,UpsService upsService) {
+        this.databaseInitializer = databaseInitializer;
         this.upsService = upsService;
     }
 
@@ -19,6 +22,7 @@ public class MyAppRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // TODO Auto-generated method stub
         System.out.println("Hello World");
+        databaseInitializer.init();
         upsService.start();
     }
 }

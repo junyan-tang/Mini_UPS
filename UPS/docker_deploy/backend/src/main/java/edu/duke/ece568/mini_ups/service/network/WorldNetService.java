@@ -12,9 +12,7 @@ import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UConnect;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UConnected;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UInitTruck;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
-import edu.duke.ece568.mini_ups.repository.PackageRepository;
 import edu.duke.ece568.mini_ups.repository.TruckRepository;
-import edu.duke.ece568.mini_ups.repository.UserRepository;
 import edu.duke.ece568.mini_ups.service.CommandStore;
 import edu.duke.ece568.mini_ups.service.DestStruct;
 import edu.duke.ece568.mini_ups.service.handler.WorldRespHandler;
@@ -25,8 +23,6 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 public class WorldNetService implements ConnectionCloser {
     private SocketService socketService;
     private TruckRepository TruckRepository;
-    private PackageRepository PackageRepository;
-    private UserRepository UserRepository;
     private WorldRespHandler worldRespHandler;
     public OutputStream out;
     public InputStream in;
@@ -35,11 +31,9 @@ public class WorldNetService implements ConnectionCloser {
     final int TRUCK_Y = 10;
 
     @Autowired
-    public WorldNetService(SocketService socketService, TruckRepository TruckRepository, PackageRepository PackageRepository, UserRepository UserRepository, WorldRespHandler worldRespHandler) {
+    public WorldNetService(SocketService socketService, TruckRepository TruckRepository, WorldRespHandler worldRespHandler) {
         this.socketService = socketService;
         this.TruckRepository = TruckRepository;
-        this.PackageRepository = PackageRepository;
-        this.UserRepository = UserRepository;
         this.worldRespHandler = worldRespHandler;
         initializeConnection();
     }
@@ -52,9 +46,9 @@ public class WorldNetService implements ConnectionCloser {
     }
     private void initializeConnection() {
         try {
-            String host = "vcm-38181.vm.duke.edu"; // 替换为实际的host
+            String host = "vcm-39267.vm.duke.edu"; 
             //String host = "vcm-41021.vm.duke.edu";
-            int port = 12345; // 替换为实际的port
+            int port = 12345;
             this.socketService.startClient(host, port);
             this.out = this.socketService.out;
             this.in = this.socketService.in;

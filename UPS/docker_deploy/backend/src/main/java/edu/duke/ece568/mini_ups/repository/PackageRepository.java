@@ -56,4 +56,9 @@ public interface PackageRepository extends JpaRepository<Package, Long>{
     @Query("update Package p set p.destinationX = :x, p.destinationY = :y where p.packageId = :packageId")
     int updateDestination(@Param("packageId") long packageId, @Param("x") int x, @Param("y") int y);
 
+    @Modifying
+    @Transactional
+    @Query("delete from Package p")
+    void deleteAllPackages();
+
 }

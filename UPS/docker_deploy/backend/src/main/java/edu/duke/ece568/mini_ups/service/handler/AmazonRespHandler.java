@@ -21,8 +21,6 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 
 @Service
 public class AmazonRespHandler {
-    // private UserRepository userRepository;
-    // private PackageRepository packageRepository;
     private UserService userService;
     private PackageService packageService;
     private ItemService itemService;
@@ -76,7 +74,6 @@ public class AmazonRespHandler {
             }
             truckService.updateStatus(truck.getTruckId(), "TRAVELLING");
 
-            // 创建新包裹
             Package newPackage = new Package();
             newPackage.setPackageId(order.getPackageID());
             newPackage.setTruck(truck);
@@ -125,7 +122,6 @@ public class AmazonRespHandler {
                 }
                 truckService.updateStatus(truck.getTruckId(), "TRAVELLING");
 
-                // 创建新包裹
                 Package newPackage = new Package();
                 newPackage.setPackageId(order.getPackageID());
                 newPackage.setTruck(truck);
@@ -201,7 +197,7 @@ public class AmazonRespHandler {
 
     private void handleAck(ACommand command) {
         for (Long ack : command.getAcksList()) {
-            System.out.println("Ack for package ");
+            System.out.println("Ack for package " + ack);
         }
     }
 }

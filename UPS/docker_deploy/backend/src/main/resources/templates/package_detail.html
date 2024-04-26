@@ -30,7 +30,7 @@
         a:hover {
             color: navy;
         }
-        .btn-ups-yellow, .btn-secondary, .btn-logout {
+        .btn-ups-yellow, .btn-secondary{
             background-color: #FFB500;
             border-color: #FFB500;
             position:absolute;
@@ -38,9 +38,25 @@
             left:10px;
             z-index:1000;
         }
-        .btn-ups-yellow:hover, .btn-secondary:hover , .btn-logout:hover{
+        .btn-ups-yellow:hover, .btn-secondary:hover , .btn-logout:hover, .btn-back:hover{
             background-color: #E0A400;
             border-color: #CC9500;
+        }
+        .btn-back {
+            background-color: #FFB500;
+            border-color: #FFB500;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+        .btn-logout {
+            background-color: #FFB500;
+            border-color: #FFB500;
+            position: absolute;
+            top: 10px;
+            right: 100px;
+            z-index: 1000;
         }
         .detail-view {
             position: relative;
@@ -80,6 +96,7 @@
 </head>
 <body>
     <div class="container">
+        <a href="/packages" class="btn btn-back">Back</a> 
         <h1 class="text-center">Package Details</h1>
         <div class="d-flex justify-content-end">
             <a th:href="@{/logout}" class="btn btn-logout">Log Out</a>
@@ -96,7 +113,6 @@
             <h2>Package Information</h2>
             <p><strong>Current Location:</strong> <span th:text="${package.currentX + ', ' + package.currentY}">10, 20</span></p>
             <p><strong>Destination:</strong> <span th:text="${package.destinationX + ', ' + package.destinationY}">50, 75</span></p>
-            <p><strong>Expected Arrival Time:</strong> <span th:text="${package.expectedArrivalTime}">24/12/2024 18:00</span></p>
             <p><strong>Status:</strong> <span th:text="${package.status}">In Transit</span></p>
         </div>
         <table class="table table-striped">

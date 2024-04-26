@@ -3,15 +3,12 @@ package edu.duke.ece568.mini_ups.service.network;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.ACommand;
 import edu.duke.ece568.mini_ups.protocol.upsToAmazon.AmazonUps.AOrderATruck;
-import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
-import edu.duke.ece568.mini_ups.repository.UserRepository;
 import edu.duke.ece568.mini_ups.service.CommandStore;
 import edu.duke.ece568.mini_ups.service.handler.AmazonRespHandler;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
@@ -20,15 +17,13 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 @Service
 public class AmazonNetService implements ConnectionCloser {
     private SocketService socketService;
-    private UserRepository userRepository;
     private AmazonRespHandler amazonResHandler;
     public OutputStream out;
     public InputStream in;
 
     @Autowired
-    public AmazonNetService(SocketService socketService, UserRepository userRepository, AmazonRespHandler amazonResHandler) {
+    public AmazonNetService(SocketService socketService, AmazonRespHandler amazonResHandler) {
         this.socketService = socketService;
-        this.userRepository = userRepository;
         this.amazonResHandler = amazonResHandler;
         initializeConnection();
     }
@@ -42,7 +37,7 @@ public class AmazonNetService implements ConnectionCloser {
 
     private void initializeConnection() {
         try{
-        String host = "vcm-38181.vm.duke.edu";
+        String host = "vcm-40425.vm.duke.edu";
         //String host = "vcm-41021.vm.duke.edu";
         int port = 34567;
         this.socketService.startClient(host, port);
@@ -51,21 +46,6 @@ public class AmazonNetService implements ConnectionCloser {
             throw new RuntimeException("Failed to start socket connection", e);
         }
     }
-
-//     // public AmazonNetService() {
-//     //     String host = "amazon-server-host";
-//     //     int port = 23456; 
-//     //     this.socketService = new SocketService();
-//     //     this.socketService.startClient(host, port);
-//     //     this.out = this.socketService.out;
-//     //     this.in = this.socketService.in;
-//     //     this.amazonResHandler = new AmazonRespHandler();
-//     // }
-
-//     // @Bean
-//     // public AmazonNetService amazonNetService() {
-//     //     return new AmazonNetService();
-//     // }
 
     public ACommand receiveCommand() throws IOException {
         try {
@@ -92,16 +72,16 @@ public class AmazonNetService implements ConnectionCloser {
         }
     }
 
-    private void sendAcksIfNecessary(ACommand command) throws IOException {
-        List<Long> acks = command.getAcksList();
-        if (!acks.isEmpty()) {
-            UCommands commands = UCommands.newBuilder()
-                    .addAllAcks(acks)
-                    .build();
-            commands.writeDelimitedTo(out);
-            out.flush();
-        }
-    }
+    // private void sendAcksIfNecessary(ACommand command) throws IOException {
+    //     List<Long> acks = command.getAcksList();
+    //     if (!acks.isEmpty()) {
+    //         UCommands commands = UCommands.newBuilder()
+    //                 .addAllAcks(acks)
+    //                 .build();
+    //         commands.writeDelimitedTo(out);
+    //         out.flush();
+    //     }
+    // }
 
     @Override
     public void closeConnection() {

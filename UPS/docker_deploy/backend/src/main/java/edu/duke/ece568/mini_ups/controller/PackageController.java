@@ -35,8 +35,19 @@ public class PackageController {
         return "package_detail";
     }
 
+    @GetMapping("/track/{packageId}")
+    public String trackPackage(@PathVariable("packageId") Long packageId, Model model) {
+        Package currPackage = packageService.findById(packageId);
+        if (currPackage == null) {
+            return "error";
+        }
+        model.addAttribute("package", currPackage);
+        return "package_display";
+    }
+
     @GetMapping("/track")
     public String trackPackage(@RequestParam("packageId") String packageId) {
-        return "redirect:/package/details/" + packageId;
+        return "redirect:/track/" + packageId;
     }
+
 }

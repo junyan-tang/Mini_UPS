@@ -4,22 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.duke.ece568.mini_ups.entity.Package;
-import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommands;
-import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UCommandsOrBuilder;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UDeliveryMade;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UErr;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UFinished;
-import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UQuery;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UTruck;
-import edu.duke.ece568.mini_ups.service.ItemService;
+import edu.duke.ece568.mini_ups.service.EmailService;
 import edu.duke.ece568.mini_ups.service.PackageService;
 import edu.duke.ece568.mini_ups.service.TruckService;
-import edu.duke.ece568.mini_ups.service.UserService;
 import edu.duke.ece568.mini_ups.service.network.ConnectionCloser;
 import edu.duke.ece568.mini_ups.service.sender.AmazonCmdSender;
 import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
@@ -28,30 +23,23 @@ import edu.duke.ece568.mini_ups.service.sender.WorldCmdSender;
 public class WorldRespHandler {
 
     private ConnectionCloser connectionCloser;
-    private UserService userService;
     private PackageService packageService;
-    private ItemService itemService;
     private TruckService truckService;
     private AmazonCmdSender amazonCmdSender;
     private WorldCmdSender worldCmdSender;
+    private EmailService emailService;
 
     @Autowired
-    public WorldRespHandler(UserService userService, PackageService packageService,
-            TruckService truckService, ItemService itemService) {
-        this.userService = userService;
+    public WorldRespHandler(PackageService packageService,
+            TruckService truckService, EmailService emailService) {
         this.packageService = packageService;
         this.truckService = truckService;
-        this.itemService = itemService;
+        this.emailService = emailService;
     }
 
     public void setConnectionCloser(ConnectionCloser connectionCloser) {
         this.connectionCloser = connectionCloser;
     }
-
-    // public WorldRespHandler(@Qualifier("worldNetService") ConnectionCloser
-    // connectionCloser) {
-    // this.connectionCloser = connectionCloser;
-    // }
 
     public void setAmazonCmdSender(AmazonCmdSender amazonCmdSender) {
         this.amazonCmdSender = amazonCmdSender;
@@ -62,12 +50,12 @@ public class WorldRespHandler {
     }
 
     public void handle(UResponses response) {
-        System.out.println("Received response from world: " + response);
+        //System.out.println("Received response from world: " + response);
         handleQuery(response);
         handleFinished(response);
         handleCompletions(response);
         handleDelivered(response);
-        handleTruckStatusUpdates(response);
+        //handleTruckStatusUpdates(response);
         handleErrors(response);
     }
 
@@ -91,9 +79,6 @@ public class WorldRespHandler {
         for (UTruck truck : response.getTruckstatusList()) {
             try {
                 worldCmdSender.sendAck(truck.getSeqnum());
-                // System.out.println(
-                //         "Truck " + truck.getTruckid() + " is " + truck.getStatus() + " at (" + truck.getX() + ", "
-                //                 + truck.getY() + ")");
                 truckService.updateStatus(truck.getTruckid(), truck.getStatus());
                 truckService.updateLocation(truck.getTruckid(), truck.getX(), truck.getY());
             } catch (Exception e) {
@@ -152,6 +137,9 @@ public class WorldRespHandler {
                     Package pack = p.get();
                     pack.setStatus("Delivered");
                     packageService.save(pack);
+
+                    emailService.sendEmail(pack.getUser().getEmail(), "Ups notification");
+
                     try {
                         amazonCmdSender.sendDelivered(pack.getPackageId());
                     } catch (Exception e) {
@@ -169,15 +157,15 @@ public class WorldRespHandler {
         }
     }
 
-    private void handleTruckStatusUpdates(UResponses response) {
-        if (!response.getTruckstatusList().isEmpty()) {
-            System.out.println("Truck status updates:");
-            for (UTruck truck : response.getTruckstatusList()) {
-                System.out.println("Truck " + truck.getTruckid() + " is " + truck.getStatus() + " at (" + truck.getX()
-                        + ", " + truck.getY() + ")");
-            }
-        }
-    }
+    // private void handleTruckStatusUpdates(UResponses response) {
+    //     if (!response.getTruckstatusList().isEmpty()) {
+    //         System.out.println("Truck status updates:");
+    //         for (UTruck truck : response.getTruckstatusList()) {
+    //             System.out.println("Truck " + truck.getTruckid() + " is " + truck.getStatus() + " at (" + truck.getX()
+    //                     + ", " + truck.getY() + ")");
+    //         }
+    //     }
+    // }
 
     private void handleErrors(UResponses response) {
         for (UErr error : response.getErrorList()) {

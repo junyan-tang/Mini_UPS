@@ -38,7 +38,7 @@
             left:10px;
             z-index:1000;
         }
-        .btn-ups-yellow:hover, .btn-secondary:hover , .btn-logout:hover, .btn-back:hover{
+        .btn-ups-yellow:hover, .btn-secondary:hover{
             background-color: #E0A400;
             border-color: #CC9500;
         }
@@ -50,14 +50,11 @@
             right: 10px;
             z-index: 1000;
         }
-        .btn-logout {
-            background-color: #FFB500;
-            border-color: #FFB500;
-            position: absolute;
-            top: 10px;
-            right: 100px;
-            z-index: 1000;
+        .btn-back:hover {
+            background-color: #E0A400;
+            border-color: #CC9500;
         }
+        
         .detail-view {
             position: relative;
             background-color: #FFF; 
@@ -96,19 +93,8 @@
 </head>
 <body>
     <div class="container">
-        <a href="/packages" class="btn btn-back">Back</a> 
+        <a href="/home" class="btn btn-back">Back</a>
         <h1 class="text-center">Package Details</h1>
-        <div class="d-flex justify-content-end">
-            <a th:href="@{/logout}" class="btn btn-logout">Log Out</a>
-        </div>
-        <div th:if="${package.status != 'Out for Delivery' and package.status != 'Delivered'}">
-            <a th:href="@{/package/modifyAddress/{id}(id=${package.packageId})}" class="btn btn-ups-yellow">Modify Address</a>
-        </div>
-        <div th:if="${package.status} == 'Out for Delivery'">
-            <div class="alert alert-warning" role="alert">
-                The final delivery address cannot be changed as the package is already out for delivery.
-            </div>
-        </div>
         <div class="detail-view">
             <h2>Package Information</h2>
             <p><strong>Current Location:</strong> <span th:text="${package.currentX + ', ' + package.currentY}">10, 20</span></p>

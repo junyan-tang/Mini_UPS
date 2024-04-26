@@ -24,4 +24,4 @@ This document describes potential problems this web page might encounters under 
 
 ## 6. Package Destination Modification and Unintended Delivery Command Transmission
 
-**Problem**: The delivery command is inadvertently sent to the world when a user attempts to change a package's destination, as the packageDao is not locked.
+**Problem**: 
