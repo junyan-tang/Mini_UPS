@@ -1,27 +1,33 @@
 # Danger Log
 
-This document describes potential problems this web page might encounters under specific conditions.
+This document outlines potential risks and vulnerabilities our web application might face under specific conditions.
 
 ## 1. High Concurrency
 
-**Problem**: Users are unable to change the destination address of packages marked as "out for delivery," even when the package is still in the warehouse.
+**Problem**: Currently, our server handles communication with external services using a single-threaded approach, and our database operations lack atomic guarantees. This could lead to race conditions and data inconsistencies under high load.
 
-## 2. Duplicate Messages
+**Possible Solution**: Implement multi-threading or asynchronous processing to handle concurrent requests efficiently. Additionally, integrate transaction mechanisms to ensure atomicity of database operations.
 
-**Problem**: Upon reconnection, the world resends the last message, leading to duplicate messages received by the UPS.
+## 2. Slow Docker Start Up
 
-## 3. Stuck Shipment
+**Problem**: Using 'gradle bootrun' for service restarts results in extended downtime, which can be costly in terms of both user experience and financial impact.
 
-**Problem**: If commands are not successfully sent to the world due to a closed connection, the shipment remains stuck in its current status.
+**Possible Solution**: Optimize Docker container orchestration by using pre-built images and minimizing service dependencies. Explore faster deployment strategies such as blue-green deployments to reduce downtime.
 
-## 4. Sending Confirmation Emails
+## 3. Security Risk
 
-**Problem**: Errors occur when sending confirmation emails to users who have not previously registered on the UPS website upon package arrival.
+**Problem**: The server side has unrestricted access to modify database contents, which could be exploited by malicious attacks, particularly if the server is compromised.
 
-## 5. Repeated Sequence Number Issue in UPS Server
+**Possible Solution**: Implement robust authentication and authorization mechanisms to limit database access. Employ regular security audits and intrusion detection systems to identify and mitigate risks.
 
-**Problem**: The UPS server occasionally sends repeated sequence numbers due to race conditions arising among multiple threads.
+## 4. High Availability
 
-## 6. Package Destination Modification and Unintended Delivery Command Transmission
+**Problem**: The system lacks an error handling mechanism to cope with unexpected shutdowns. Current restart procedures involve data deletion and reinitialization, risking data loss.
 
-**Problem**: 
+**Possible Solution**: Develop a more resilient error recovery process including data replication and failover strategies to maintain service continuity. Implement regular backups and test recovery procedures to ensure data integrity.
+
+## 5. Imbalanced Workload
+
+**Problem**: The system does not have a workload balancing mechanism, making it vulnerable to service disruptions under sudden surges in traffic.
+
+**Possible Solution**: Integrate a load balancer, such as Nginx, to distribute incoming traffic evenly across multiple server instances. Consider scaling solutions, both horizontal and vertical, to adjust resources dynamically based on real-time demand.
