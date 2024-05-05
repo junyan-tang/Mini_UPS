@@ -12,7 +12,7 @@ import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UErr;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UFinished;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UResponses;
 import edu.duke.ece568.mini_ups.protocol.upsToWorld.WorldUps.UTruck;
-import edu.duke.ece568.mini_ups.service.EmailService;
+import edu.duke.ece568.mini_ups.service.EmailSender;
 import edu.duke.ece568.mini_ups.service.PackageService;
 import edu.duke.ece568.mini_ups.service.TruckService;
 import edu.duke.ece568.mini_ups.service.network.ConnectionCloser;
@@ -27,11 +27,11 @@ public class WorldRespHandler {
     private TruckService truckService;
     private AmazonCmdSender amazonCmdSender;
     private WorldCmdSender worldCmdSender;
-    private EmailService emailService;
+    private EmailSender emailService;
 
     @Autowired
     public WorldRespHandler(PackageService packageService,
-            TruckService truckService, EmailService emailService) {
+            TruckService truckService, EmailSender emailService) {
         this.packageService = packageService;
         this.truckService = truckService;
         this.emailService = emailService;
